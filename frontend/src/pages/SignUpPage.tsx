@@ -7,6 +7,7 @@ import {
 	Text,
 	FormControl,
 	FormLabel,
+	FormHelperText,
 	FormErrorMessage,
 	InputGroup,
 	Input,
@@ -24,6 +25,7 @@ import {
 	WarningIcon,
 	ViewIcon,
 	ViewOffIcon,
+	InfoIcon,
 } from "@chakra-ui/icons";
 
 import { Link as RouterLink } from "react-router-dom";
@@ -35,22 +37,18 @@ import { z } from "zod";
 
 const validationSchema = z
 	.object({
-		firstName: z.string().min(1, { message: "First name is required" }),
-		lastName: z.string().min(1, { message: "Last name is required" }),
+		name: z.string().min(1, { message: "Full name is required" }),
 		email: z.string().min(1, { message: "Email is required" }).email({
 			message: "Must be a valid email",
 		}),
 		password: z
 			.string()
-			.min(8, { message: "Password must be atleast 8 characters" }),
+			.min(8, { message: "Password must be atleast 8 characters" })
+			.max(72, { message: "Password can be 72 characters ata most" }),
 		confirmPassword: z
 			.string()
-			.min(1, { message: "Confirm Password is required" }),
-		terms: z.literal(true, {
-			errorMap: () => ({
-				message: "You must accept Terms and Conditions",
-			}),
-		}),
+			.min(8, { message: "Password must be atleast 8 characters" })
+			.max(72, { message: "Password can be 72 characters ata most" }),
 	})
 	.refine((data) => data.password === data.confirmPassword, {
 		path: ["confirmPassword"],
@@ -94,6 +92,24 @@ export default function SignUpPage() {
 				</Box>
 				<Box my={4} textAlign="left">
 					<form onSubmit={handleSubmit(onSubmit)}>
+						<FormControl isInvalid={Boolean(errors.name)}>
+							<FormLabel htmlFor="name">Full Name</FormLabel>
+							<InputGroup>
+								<InputLeftElement
+									pointerEvents="none"
+									children={<InfoIcon color="gray.300" />}
+								/>
+								<Input
+									id="name"
+									placeholder="Enter your full name"
+									{...register("name")}
+								/>
+							</InputGroup>
+							<FormErrorMessage>
+								<Icon as={WarningIcon} color="red.500" mr={1} />
+								{errors.name && errors.name.message}
+							</FormErrorMessage>
+						</FormControl>
 						<FormControl isInvalid={Boolean(errors.email)}>
 							<FormLabel htmlFor="email">Email</FormLabel>
 							<InputGroup>
@@ -103,7 +119,7 @@ export default function SignUpPage() {
 								/>
 								<Input
 									id="email"
-									placeholder="Enter email"
+									placeholder="name@email.com"
 									{...register("email")}
 								/>
 							</InputGroup>
@@ -118,7 +134,7 @@ export default function SignUpPage() {
 								<Input
 									id="password"
 									type={showPassword ? "text" : "password"}
-									placeholder="Enter password"
+									placeholder="Create password"
 									{...register("password")}
 								/>
 								<Tooltip
@@ -150,6 +166,9 @@ export default function SignUpPage() {
 									</InputRightElement>
 								</Tooltip>
 							</InputGroup>
+							<FormHelperText fontSize="sm" color="gray.500">
+								Between 8 and 72 characters
+							</FormHelperText>
 							<FormErrorMessage>
 								<Icon as={WarningIcon} color="red.500" mr={1} />
 								{errors.password && errors.password.message}
@@ -187,7 +206,7 @@ export default function SignUpPage() {
 						</Text>
 						<Divider my={4} />
 						<Text fontSize="sm" color="gray.500" mt={2}>
-							By clicking “Continue”, I accept the Coursera{" "}
+							By clicking "Sign Up", I accept the Coursera{" "}
 							<Link as={RouterLink} to="/about" color="blue.500">
 								Terms of Service
 							</Link>{" "}
