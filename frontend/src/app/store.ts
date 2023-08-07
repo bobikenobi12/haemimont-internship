@@ -1,6 +1,15 @@
 import { configureStore, combineReducers } from "@reduxjs/toolkit";
 
-const appReducer = combineReducers({});
+// slices
+import { authSlice } from "../features/auth/authSlice";
+
+// api
+import { authApi } from "../features/auth/authApiSlice";
+
+const appReducer = combineReducers({
+	auth: authSlice.reducer,
+	[authApi.reducerPath]: authApi.reducer,
+});
 
 const rootReducer = (state: any, action: any) => {
 	if (action.type === "auth/logout") {
@@ -15,7 +24,7 @@ export const store = configureStore({
 		return getDefaultMiddleware({
 			serializableCheck: false,
 			immutableCheck: false,
-		}).concat();
+		}).concat(authApi.middleware);
 	},
 });
 

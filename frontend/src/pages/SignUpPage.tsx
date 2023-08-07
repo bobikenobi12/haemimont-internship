@@ -18,6 +18,7 @@ import {
 	Link,
 	Divider,
 	Icon,
+	useToast,
 } from "@chakra-ui/react";
 
 import {
@@ -28,7 +29,10 @@ import {
 	InfoIcon,
 } from "@chakra-ui/icons";
 
-import { Link as RouterLink } from "react-router-dom";
+import { useRegisterMutation } from "../features/auth/authApiSlice";
+import { Role } from "../features/auth/authApiSlice";
+
+import { Link as RouterLink, useNavigate } from "react-router-dom";
 
 import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -57,7 +61,11 @@ const validationSchema = z
 
 type ValidationSchema = z.infer<typeof validationSchema>;
 
-export default function SignUpPage() {
+export default function SignUpPage({ role }: { role: Role }) {
+	const toast = useToast();
+	const navigate = useNavigate();
+	const userType = role === Role.STUDENT ? "student" : "instructor";
+
 	const {
 		register,
 		handleSubmit,
@@ -66,8 +74,34 @@ export default function SignUpPage() {
 		resolver: zodResolver(validationSchema),
 	});
 
-	const onSubmit: SubmitHandler<ValidationSchema> = (data) =>
-		console.log(data);
+	const onSubmit: SubmitHandler<ValidationSchema> = async (data) => {
+		try {
+			await registerUser({
+				name: data.name,
+				email: data.email,
+				password: data.password,
+				role: role,
+			}).unwrap();
+			toast({
+				title: "Account created.",
+				description: "We've created your account for you.",
+				status: "success",
+				duration: 9000,
+				isClosable: true,
+			});
+			navigate("/sign-in");
+		} catch (err: any) {
+			toast({
+				title: "An error occurred.",
+				description: err.data.message,
+				status: "error",
+				duration: 9000,
+				isClosable: true,
+			});
+		}
+	};
+
+	const [registerUser, { isLoading }] = useRegisterMutation();
 
 	const [showPassword, setShowPassword] = useState<Boolean>(false);
 
@@ -88,7 +122,7 @@ export default function SignUpPage() {
 			>
 				<Box textAlign="center">
 					<Heading>Coursera</Heading>
-					<Text>Sign up and enjoy the features</Text>
+					<Text>Sign up and enjoy the features as a {userType}</Text>
 				</Box>
 				<Box my={4} textAlign="left">
 					<form onSubmit={handleSubmit(onSubmit)}>
@@ -119,6 +153,7 @@ export default function SignUpPage() {
 								/>
 								<Input
 									id="email"
+									autoComplete="email"
 									placeholder="name@email.com"
 									{...register("email")}
 								/>
@@ -133,6 +168,7 @@ export default function SignUpPage() {
 							<InputGroup>
 								<Input
 									id="password"
+									autoComplete="new-password"
 									type={showPassword ? "text" : "password"}
 									placeholder="Create password"
 									{...register("password")}
@@ -183,6 +219,7 @@ export default function SignUpPage() {
 							<InputGroup>
 								<Input
 									id="confirmPassword"
+									autoComplete="new-password"
 									type="password"
 									placeholder="Enter your password again"
 									{...register("confirmPassword")}
@@ -222,7 +259,7 @@ export default function SignUpPage() {
 							mt={4}
 							colorScheme="blue"
 							type="submit"
-							// isLoading={isLoading}
+							isLoading={isLoading}
 							disabled={isSubmitting}
 						>
 							Sign Up
