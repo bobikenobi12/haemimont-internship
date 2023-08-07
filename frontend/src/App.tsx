@@ -4,12 +4,14 @@ import { Role } from "./features/auth/authApiSlice";
 // Pages
 import SignUpPage from "./pages/SignUpPage";
 import SignInPage from "./pages/SignInPage";
+import FirstPage from "./pages/FirstPage";
+
 
 function App() {
 	return (
 		<>
 			<Routes>
-				<Route path="/" element={<h1>Haemimont internship</h1>} />
+				<Route path="/" element={<FirstPage/>} />
 				<Route path="/sign-up/">
 					<Route
 						path="student"
