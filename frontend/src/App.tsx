@@ -3,6 +3,7 @@ import { Role } from "./features/auth/authApiSlice";
 
 // Pages
 import SignUpPage from "./pages/SignUpPage";
+import SignInPage from "./pages/SignInPage";
 
 function App() {
 	return (
@@ -19,7 +20,7 @@ function App() {
 						element={<SignUpPage role={Role.INSTRUCTOR} />}
 					/>
 				</Route>
-				<Route path="/sign-in" />
+				<Route path="/sign-in" element={<SignInPage />} />
 				<Route path="*" element={<h1>Not found</h1>} />
 			</Routes>
 		</>
