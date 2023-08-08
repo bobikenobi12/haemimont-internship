@@ -5,6 +5,7 @@ import { Role } from "./features/auth/authApiSlice";
 import SignUpPage from "./pages/SignUpPage";
 import SignInPage from "./pages/SignInPage";
 import FirstPage from "./pages/FirstPage";
+import TermsOfService from "./pages/TermsOfService";
 
 
 function App() {
@@ -23,6 +24,7 @@ function App() {
 					/>
 				</Route>
 				<Route path="/sign-in" element={<SignInPage />} />
+				<Route path="/terms-of-service" element={<TermsOfService/>}/>
 				<Route path="*" element={<h1>Not found</h1>} />
 			</Routes>
 		</>

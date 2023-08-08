@@ -244,7 +244,7 @@ export default function SignUpPage({ role }: { role: Role }) {
 						<Divider my={4} />
 						<Text fontSize="sm" color="gray.500" mt={2}>
 							By clicking "Sign Up", I accept the Coursera{" "}
-							<Link as={RouterLink} to="/about" color="blue.500">
+							<Link as={RouterLink} to="/terms-of-service" isExternal color="blue.500">
 								Terms of Service
 							</Link>{" "}
 							and
