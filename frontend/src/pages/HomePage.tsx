@@ -42,30 +42,23 @@ const Course = () => {
 			/>
 			<Stack>
 				<CardBody pt="10px" pb="10px" pl="20px" pr="10px">
-					<Text>
-						<Heading size="md">
-							Fit mouche fosses plonge fut oui.
-						</Heading>
+					<Heading size="md">
+						Fit mouche fosses plonge fut oui.
+					</Heading>
 
-						<Badge
-							colorScheme="blue"
-							fontSize="sm"
-							mt="-50px"
-							ml="450px"
-						>
-							40 credits
-						</Badge>
-					</Text>
+					<Badge
+						colorScheme="blue"
+						fontSize="sm"
+						mt="-50px"
+						ml="450px"
+					>
+						40 credits
+					</Badge>
 					<Text py="4">
-						<p>
-							Ah pourquoi loquaces je galopade habitent fanfares.
-							Amour peine la arret qu. Retreci cheveux non ils nos
-							prenons horizon ton entiere legende.
-						</p>
-						<p>
-							Quitta mes reelle moment patrie moi son cahots des
-							ordure.
-						</p>
+						Ah pourquoi loquaces je galopade habitent fanfares.
+						Amour peine la arret qu. Retreci cheveux non ils nos
+						prenons horizon ton entiere legende. Quitta mes reelle
+						moment patrie moi son cahots des ordure.
 					</Text>
 				</CardBody>
 
@@ -88,13 +81,9 @@ const CoursesWrapper = () => {
 	return (
 		<>
 			<Box w="1500px" h="500px" overflowX="hidden" overflowY="scroll">
-				<ul>
-					<li>
-						<Course />
-						<Course />
-						<Course />
-					</li>
-				</ul>
+				<Course />
+				<Course />
+				<Course />
 			</Box>
 		</>
 	);

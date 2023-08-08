@@ -45,6 +45,7 @@ export const authSlice = createSlice({
 			}
 		);
 		builder.addMatcher(authApi.endpoints.logout.matchFulfilled, (state) => {
+			console.log("logout in authSlice.ts");
 			state.token = null;
 			localStorage.removeItem("token");
 			localStorage.removeItem("refreshToken");

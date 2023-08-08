@@ -11,6 +11,7 @@ import {
 	useToast,
 	useDisclosure,
 } from "@chakra-ui/react";
+
 import { useLogoutMutation } from "../features/auth/authApiSlice";
 
 export default function SignOutDialog() {
@@ -61,6 +62,7 @@ export default function SignOutDialog() {
 								onClick={async () => {
 									try {
 										await signOut().unwrap();
+										onCloseSignout();
 										toast({
 											title: "Signed out successfully!",
 											description:
@@ -70,6 +72,7 @@ export default function SignOutDialog() {
 											isClosable: true,
 										});
 									} catch (error: any) {
+										console.log(error);
 										toast({
 											title: "An error occurred.",
 											description:
