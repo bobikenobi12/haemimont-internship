@@ -7,6 +7,7 @@ import SignInPage from "./pages/SignInPage";
 import HomePage from "./pages/HomePage";
 import TermsOfService from "./pages/TermsOfService";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
+import UserProfilePage from "./pages/UserProfilePage";
 
 function App() {
 	return (
@@ -24,6 +25,7 @@ function App() {
 				<Route path="/sign-in" element={<SignInPage />} />
 				<Route path="/terms-of-service" element={<TermsOfService/>}/>
 				<Route path="/privacy-policy" element={<PrivacyPolicy/>}/>
+				<Route path="/user-profile" element={<UserProfilePage/>}/>
 				<Route path="*" element={<h1>Not found</h1>} />
 			</Routes>
 		</>
