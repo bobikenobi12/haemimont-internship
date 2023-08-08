@@ -42,6 +42,7 @@ export const authApi = apiSlice.injectEndpoints({
 			query: () => ({
 				url: "user/logout",
 				method: "GET",
+				responseHandler: "text",
 			}),
 		}),
 		refreshToken: builder.mutation<Tokens, void>({
