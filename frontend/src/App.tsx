@@ -4,14 +4,14 @@ import { Role } from "./features/auth/authApiSlice";
 // Pages
 import SignUpPage from "./pages/SignUpPage";
 import SignInPage from "./pages/SignInPage";
-import FirstPage from "./pages/FirstPage";
+import HomePage from "./pages/HomePage";
 import TermsOfService from "./pages/TermsOfService";
 
 function App() {
 	return (
 		<>
 			<Routes>
-				<Route path="/" element={<FirstPage />} />
+				<Route path="/" element={<HomePage />} />
 				<Route
 					path="/sign-up/student"
 					element={<SignUpPage role={Role.STUDENT} />}
@@ -21,7 +21,7 @@ function App() {
 					element={<SignUpPage role={Role.TEACHER} />}
 				/>
 				<Route path="/sign-in" element={<SignInPage />} />
-				<Route path="/terms-of-service" element={<TermsOfService/>}/>
+				<Route path="/terms-of-service" element={<TermsOfService />} />
 				<Route path="*" element={<h1>Not found</h1>} />
 			</Routes>
 		</>
