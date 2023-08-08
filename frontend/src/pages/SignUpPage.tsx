@@ -266,7 +266,7 @@ export default function SignUpPage({ role }: { role: Role }) {
 							</Link>{" "}
 							and
 							{` `}
-							<Link as={RouterLink} to="/about" color="blue.500">
+							<Link as={RouterLink} to="/privacy-policy"isExternal color="blue.500">
 								Privacy Policy
 							</Link>
 							.

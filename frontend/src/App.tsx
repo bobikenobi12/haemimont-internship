@@ -6,6 +6,7 @@ import SignUpPage from "./pages/SignUpPage";
 import SignInPage from "./pages/SignInPage";
 import FirstPage from "./pages/FirstPage";
 import TermsOfService from "./pages/TermsOfService";
+import PrivacyPolicy from "./pages/PrivacyPolicy";
 
 function App() {
 	return (
@@ -22,6 +23,7 @@ function App() {
 				/>
 				<Route path="/sign-in" element={<SignInPage />} />
 				<Route path="/terms-of-service" element={<TermsOfService/>}/>
+				<Route path="/privacy-policy" element={<PrivacyPolicy/>}/>
 				<Route path="*" element={<h1>Not found</h1>} />
 			</Routes>
 		</>
