@@ -4,7 +4,7 @@ import { Role } from "./features/auth/authApiSlice";
 // Pages
 import SignUpPage from "./pages/SignUpPage";
 import SignInPage from "./pages/SignInPage";
-import FirstPage from "./pages/FirstPage";
+import HomePage from "./pages/HomePage";
 import TermsOfService from "./pages/TermsOfService";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 
@@ -12,7 +12,7 @@ function App() {
 	return (
 		<>
 			<Routes>
-				<Route path="/" element={<FirstPage />} />
+				<Route path="/" element={<HomePage />} />
 				<Route
 					path="/sign-up/student"
 					element={<SignUpPage role={Role.STUDENT} />}
