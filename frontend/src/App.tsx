@@ -16,8 +16,8 @@ function App() {
 					element={<SignUpPage role={Role.STUDENT} />}
 				/>
 				<Route
-					path="/sign-up/instructor"
-					element={<SignUpPage role={Role.INSTRUCTOR} />}
+					path="/sign-up/teacher"
+					element={<SignUpPage role={Role.TEACHER} />}
 				/>
 				<Route path="/sign-in" element={<SignInPage />} />
 				<Route path="*" element={<h1>Not found</h1>} />

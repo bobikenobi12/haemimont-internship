@@ -203,10 +203,10 @@ export default function SignInPage() {
 							{` `}or{` `}
 							<Link
 								as={RouterLink}
-								to="/sign-up/instructor"
+								to="/sign-up/teacher"
 								color="blue.500"
 							>
-								Instructor
+								Teacher
 							</Link>
 						</Text>
 					</HStack>
