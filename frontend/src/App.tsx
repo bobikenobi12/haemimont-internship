@@ -7,22 +7,19 @@ import SignInPage from "./pages/SignInPage";
 import FirstPage from "./pages/FirstPage";
 import TermsOfService from "./pages/TermsOfService";
 
-
 function App() {
 	return (
 		<>
 			<Routes>
-				<Route path="/" element={<FirstPage/>} />
-				<Route path="/sign-up/">
-					<Route
-						path="student"
-						element={<SignUpPage role={Role.STUDENT} />}
-					/>
-					<Route
-						path="instructor"
-						element={<SignUpPage role={Role.INSTRUCTOR} />}
-					/>
-				</Route>
+				<Route path="/" element={<FirstPage />} />
+				<Route
+					path="/sign-up/student"
+					element={<SignUpPage role={Role.STUDENT} />}
+				/>
+				<Route
+					path="/sign-up/teacher"
+					element={<SignUpPage role={Role.TEACHER} />}
+				/>
 				<Route path="/sign-in" element={<SignInPage />} />
 				<Route path="/terms-of-service" element={<TermsOfService/>}/>
 				<Route path="*" element={<h1>Not found</h1>} />

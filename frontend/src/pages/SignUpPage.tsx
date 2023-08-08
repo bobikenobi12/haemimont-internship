@@ -64,7 +64,7 @@ type ValidationSchema = z.infer<typeof validationSchema>;
 export default function SignUpPage({ role }: { role: Role }) {
 	const toast = useToast();
 	const navigate = useNavigate();
-	const userType = role === Role.STUDENT ? "student" : "instructor";
+	const userType = role === Role.STUDENT ? "student" : "teacher";
 
 	const {
 		register,
@@ -123,6 +123,23 @@ export default function SignUpPage({ role }: { role: Role }) {
 				<Box textAlign="center">
 					<Heading>Coursera</Heading>
 					<Text>Sign up and enjoy the features as a {userType}</Text>
+					<Divider my={4} />
+					<Text>
+						Or {` `}
+						<Link
+							as={RouterLink}
+							to={
+								role === Role.STUDENT
+									? "/sign-up/teacher"
+									: "/sign-up/student"
+							}
+							color="blue.500"
+						>
+							{role === Role.STUDENT
+								? "Sign up as an teacher"
+								: "Sign up as a student"}
+						</Link>
+					</Text>
 				</Box>
 				<Box my={4} textAlign="left">
 					<form onSubmit={handleSubmit(onSubmit)}>

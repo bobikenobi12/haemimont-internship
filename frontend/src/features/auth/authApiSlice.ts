@@ -2,7 +2,7 @@ import { apiSlice } from "../../app/api/apiSlice";
 
 export enum Role {
 	STUDENT = "STUDENT",
-	INSTRUCTOR = "INSTRUCTOR",
+	TEACHER = "TEACHER",
 }
 
 export interface RegisterRequest {
