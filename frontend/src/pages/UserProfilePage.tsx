@@ -72,7 +72,7 @@ return(
 </Container>
 
 <Container  ml='835px' mt='-400px'>
-<Text fontSize='3xl' mb='30px' color='#6065EA'>Course List: </Text>
+<Text fontSize='3xl' mb='10px' color='#6065EA'>Course List: </Text>
 <Box overflowX="hidden" overflowY="scroll" h='330px' w='550px'>
     <Card mr="15px" mt="20px">
     <Stack>
