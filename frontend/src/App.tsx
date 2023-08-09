@@ -28,7 +28,7 @@ function App() {
 					path="/sign-up/teacher"
 					element={<SignUpPage role={Role.TEACHER} />}
 				/>
-				<Route path="/terms-of-service" element={<TermsOfService />} />
+				<Route path="/ternjnjnjms-of-service" element={<TermsOfService />} />
 				<Route path="/privacy-policy" element={<PrivacyPolicy />} />
 				<Route path="/user-profile" element={<UserProfilePage/>}/>
 				<Route path="*" element={<h1>Not found</h1>} />
