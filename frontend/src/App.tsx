@@ -18,7 +18,7 @@ function App() {
 		<>
 			<Routes>
 				<Route path="/sign-up/*" element={<PublicOutlet />} />
-				<Route path="/sign-in" element={<SignInPage />} />
+				<Route path="/sign-in" element={<PublicOutlet />} />
 				<Route path="/" element={<HomePage />} />
 				<Route
 					path="/sign-up/student"
