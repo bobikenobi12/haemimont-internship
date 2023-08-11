@@ -49,10 +49,7 @@ const validationSchema = z
 			.string()
 			.min(8, { message: "Password must be atleast 8 characters" })
 			.max(72, { message: "Password can be 72 characters ata most" }),
-		confirmPassword: z
-			.string()
-			.min(8, { message: "Password must be atleast 8 characters" })
-			.max(72, { message: "Password can be 72 characters ata most" }),
+		confirmPassword: z.string(),
 	})
 	.refine((data) => data.password === data.confirmPassword, {
 		path: ["confirmPassword"],
