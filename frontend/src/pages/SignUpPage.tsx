@@ -89,7 +89,7 @@ export default function SignUpPage({ role }: { role: Role }) {
 				duration: 9000,
 				isClosable: true,
 			});
-			navigate("/sign-in");
+			navigate("/user/sign-in");
 		} catch (err: any) {
 			toast({
 				title: "An error occurred.",
@@ -130,8 +130,8 @@ export default function SignUpPage({ role }: { role: Role }) {
 							as={RouterLink}
 							to={
 								role === Role.STUDENT
-									? "/sign-up/teacher"
-									: "/sign-up/student"
+									? "/user/sign-up/teacher"
+									: "/user/sign-up/student"
 							}
 							color="blue.500"
 						>
@@ -252,7 +252,7 @@ export default function SignUpPage({ role }: { role: Role }) {
 							Already have an account?{` `}
 							<Link
 								as={RouterLink}
-								to="/sign-in"
+								to="/user/sign-in"
 								color="blue.500"
 							>
 								Sign in
@@ -261,12 +261,22 @@ export default function SignUpPage({ role }: { role: Role }) {
 						<Divider my={4} />
 						<Text fontSize="sm" color="gray.500" mt={2}>
 							By clicking "Sign Up", I accept the Coursera{" "}
-							<Link as={RouterLink} to="/terms-of-service" isExternal color="blue.500">
+							<Link
+								as={RouterLink}
+								to="/terms-of-service"
+								isExternal
+								color="blue.500"
+							>
 								Terms of Service
 							</Link>{" "}
 							and
 							{` `}
-							<Link as={RouterLink} to="/privacy-policy"isExternal color="blue.500">
+							<Link
+								as={RouterLink}
+								to="/privacy-policy"
+								isExternal
+								color="blue.500"
+							>
 								Privacy Policy
 							</Link>
 							.
