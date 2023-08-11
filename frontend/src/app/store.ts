@@ -4,16 +4,20 @@ import { configureStore, combineReducers } from "@reduxjs/toolkit";
 import { authSlice } from "../features/auth/authSlice";
 
 // api
-import { authApi } from "../features/auth/authApiSlice";
+import { apiSlice } from "./api/apiSlice";
 
 const appReducer = combineReducers({
 	auth: authSlice.reducer,
-	[authApi.reducerPath]: authApi.reducer,
+	[apiSlice.reducerPath]: apiSlice.reducer,
 });
 
 const rootReducer = (state: any, action: any) => {
 	if (action.type === "auth/logout") {
-		console.log("logout in store.ts");
+		console.log("logout");
+		state = undefined;
+	}
+	if (action.type === "auth/logOut") {
+		console.log("logOut");
 		state = undefined;
 	}
 	return appReducer(state, action);
@@ -25,7 +29,7 @@ export const store = configureStore({
 		return getDefaultMiddleware({
 			serializableCheck: false,
 			immutableCheck: false,
-		}).concat(authApi.middleware);
+		}).concat(apiSlice.middleware);
 	},
 });
 

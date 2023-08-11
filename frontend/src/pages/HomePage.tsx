@@ -95,9 +95,9 @@ export default function HomePage() {
 	return (
 		<>
 			<Container pt="15px" mr="1.5" maxW="fit-content">
-				{!token ? (
+				{!token && (
 					<>
-						<Link as={RouterLink} to="/sign-in">
+						<Link as={RouterLink} to="/user/sign-in">
 							<Button
 								as={Button}
 								size="md"
@@ -107,7 +107,7 @@ export default function HomePage() {
 								Sign In
 							</Button>
 						</Link>
-						<Link as={RouterLink} to="/sign-up/student">
+						<Link as={RouterLink} to="/user/sign-up/student">
 							<Button
 								as={Button}
 								variant="outline"
@@ -117,9 +117,8 @@ export default function HomePage() {
 							</Button>
 						</Link>
 					</>
-				) : (
-					<SignOutDialog />
 				)}
+				{token && <SignOutDialog />}
 			</Container>
 			<Center>
 				<Text fontSize="4xl" pt="20px">

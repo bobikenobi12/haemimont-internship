@@ -10,7 +10,7 @@ import PrivacyPolicy from "./pages/PrivacyPolicy";
 import UserProfilePage from "./pages/UserProfilePage";
 
 // Guards
-// import RequireAuth from "./utils/RequireAuth";
+import RequireAuth from "./utils/RequireAuth";
 import PublicOutlet from "./utils/PublicOutlet";
 import CourseSignUpPage from "./pages/CourseSignUpPage";
 
@@ -18,21 +18,28 @@ function App() {
 	return (
 		<>
 			<Routes>
-				<Route path="/sign-up/*" element={<PublicOutlet />} />
-				<Route path="/sign-in/*" element={<PublicOutlet />} />
+				{/* Public routes */}
+				<Route path="/user/" element={<PublicOutlet />}>
+					<Route path="sign-in" element={<SignInPage />} />
+					<Route
+						path="sign-up/student"
+						element={<SignUpPage role={Role.STUDENT} />}
+					/>
+					<Route
+						path="sign-up/teacher"
+						element={<SignUpPage role={Role.TEACHER} />}
+					/>
+				</Route>
+
+				{/* Private routes */}
+				<Route path="/user/" element={<RequireAuth />}>
+					<Route path="profile" element={<UserProfilePage />} />
+				</Route>
+
+				{/* Public routes */}
 				<Route path="/" element={<HomePage />} />
-				<Route
-					path="/sign-up/student"
-					element={<SignUpPage role={Role.STUDENT} />}
-				/>
-				<Route
-					path="/sign-up/teacher"
-					element={<SignUpPage role={Role.TEACHER} />}
-				/>
-				<Route path="/sign-in" element={<SignInPage />} />
 				<Route path="/terms-of-service" element={<TermsOfService />} />
 				<Route path="/privacy-policy" element={<PrivacyPolicy />} />
-				<Route path="/user-profile" element={<UserProfilePage />} />
 				<Route path="/course-sign-up" element={<CourseSignUpPage/>} />
 				<Route path="*" element={<h1>Not found</h1>} />
 			</Routes>

@@ -6,7 +6,6 @@ import {
 	CardBody,
 	Badge,
 	Box,
-	Container,
 	Stack,
 	StackDivider,
 	Accordion,
@@ -18,6 +17,9 @@ import {
 	Avatar,
 } from "@chakra-ui/react";
 import NavBar from "../components/NavBar";
+
+import UpdateProfileModal from "../components/UpdateProfileModal";
+import SignOutDialog from "../components/SignOutDialog";
 
 export default function UserProfilePage() {
 	return (
@@ -41,7 +43,7 @@ export default function UserProfilePage() {
 				>
 					<Heading color="#6065EA">Profile: </Heading>
 					<Avatar size="3xl"></Avatar>
-					<Container w="100%" p={0}>
+					<Box w="100%">
 						<Card w="100%" boxShadow="md">
 							<CardBody>
 								<Stack divider={<StackDivider />}>
@@ -68,7 +70,18 @@ export default function UserProfilePage() {
 								</Stack>
 							</CardBody>
 						</Card>
-					</Container>
+					</Box>
+					<Flex
+						w="100%"
+						textAlign="center"
+						direction={["column", "column", "column", "row"]}
+						justifyContent="center"
+						alignItems="center"
+						gap={5}
+					>
+						<UpdateProfileModal />
+						<SignOutDialog />
+					</Flex>
 				</Flex>
 
 				<Box maxH="600px" w={["100%", "100%", "100%", "55%"]} p="20px">

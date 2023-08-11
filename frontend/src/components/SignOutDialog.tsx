@@ -12,12 +12,16 @@ import {
 	useDisclosure,
 } from "@chakra-ui/react";
 
+import { useNavigate } from "react-router-dom";
+
 import { useLogoutMutation } from "../features/auth/authApiSlice";
 
 export default function SignOutDialog() {
 	const [signOut, { isLoading: isSigningOut }] = useLogoutMutation();
 
 	const toast = useToast();
+	const navigate = useNavigate();
+
 	const {
 		isOpen: isOpenSignout,
 		onOpen: onOpenSignout,
@@ -62,7 +66,6 @@ export default function SignOutDialog() {
 								onClick={async () => {
 									try {
 										await signOut().unwrap();
-										onCloseSignout();
 										toast({
 											title: "Signed out successfully!",
 											description:
@@ -71,6 +74,8 @@ export default function SignOutDialog() {
 											duration: 5000,
 											isClosable: true,
 										});
+										navigate("/");
+										onCloseSignout();
 									} catch (error: any) {
 										console.log(error);
 										toast({

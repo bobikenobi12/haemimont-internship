@@ -195,7 +195,7 @@ export default function SignInPage() {
 							Sign up as a {` `}
 							<Link
 								as={RouterLink}
-								to="/sign-up/student"
+								to="/user/sign-up/student"
 								color="blue.500"
 							>
 								Student
@@ -203,7 +203,7 @@ export default function SignInPage() {
 							{` `}or{` `}
 							<Link
 								as={RouterLink}
-								to="/sign-up/teacher"
+								to="/user/sign-up/teacher"
 								color="blue.500"
 							>
 								Teacher

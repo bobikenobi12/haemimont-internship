@@ -38,6 +38,20 @@ export const authApi = apiSlice.injectEndpoints({
 				body: { email, password },
 			}),
 		}),
+		updateName: builder.mutation<void, { name: string }>({
+			query: (name) => ({
+				url: "user/updateName",
+				method: "POST",
+				body: { name },
+			}),
+		}),
+		changeEmail: builder.mutation<void, { email: string }>({
+			query: (email) => ({
+				url: "user/changeEmail",
+				method: "POST",
+				body: { email },
+			}),
+		}),
 		logout: builder.mutation<void, void>({
 			query: () => ({
 				url: "user/logout",
@@ -49,13 +63,21 @@ export const authApi = apiSlice.injectEndpoints({
 			query: () => ({
 				url: "user/refresh/v1",
 				method: "POST",
-				body: {
-					token: localStorage.getItem("refreshToken"),
+				headers: {
+					Authorization: `Bearer ${localStorage.getItem(
+						"refreshToken"
+					)}`,
 				},
+				responseHandler: "text",
 			}),
 		}),
 	}),
 });
 
-export const { useRegisterMutation, useLoginMutation, useLogoutMutation } =
-	authApi;
+export const {
+	useRegisterMutation,
+	useLoginMutation,
+	useUpdateNameMutation,
+	useChangeEmailMutation,
+	useLogoutMutation,
+} = authApi;

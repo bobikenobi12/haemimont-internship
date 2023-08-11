@@ -6,5 +6,5 @@ import { useAppSelector } from "../app/hooks";
 export default function RequireAuth() {
 	const token = useAppSelector(selectToken);
 
-	return <>{token ? <Outlet /> : <Navigate to="/sign-in" />}</>;
+	return <>{token ? <Outlet /> : <Navigate to="/user/sign-in" />}</>;
 }
