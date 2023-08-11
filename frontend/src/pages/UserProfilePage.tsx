@@ -16,9 +16,9 @@ import {
 	Button,
 	Avatar,
 } from "@chakra-ui/react";
-import NavBar from "../components/NavBar";
 
 import UpdateProfileModal from "../components/UpdateProfileModal";
+import ChangePasswordModal from "../components/ChangePasswordModal";
 import SignOutDialog from "../components/SignOutDialog";
 
 export default function UserProfilePage() {
@@ -28,7 +28,7 @@ export default function UserProfilePage() {
 			direction={["column", "column", "column", "row"]}
 			justifyContent="space-between"
 			alignItems={["center", "center", "center", "center"]}
-      >
+		>
 			<Flex
 				w={["100%", "100%", "100%", "45%"]}
 				h="100%"
@@ -77,6 +77,7 @@ export default function UserProfilePage() {
 					gap={5}
 				>
 					<UpdateProfileModal />
+					<ChangePasswordModal />
 					<SignOutDialog />
 				</Flex>
 			</Flex>
