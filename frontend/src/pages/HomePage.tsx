@@ -3,8 +3,6 @@ import {
 	Button,
 	Center,
 	Text,
-	Link,
-	Container,
 	Box,
 	Card,
 	CardBody,
@@ -13,13 +11,6 @@ import {
 	Heading,
 	Stack,
 } from "@chakra-ui/react";
-
-import { Link as RouterLink } from "react-router-dom";
-
-import { useAppSelector } from "../app/hooks";
-import { selectToken } from "../features/auth/authSlice";
-
-import SignOutDialog from "../components/SignOutDialog";
 
 const Course = () => {
 	return (
@@ -90,36 +81,8 @@ const CoursesWrapper = () => {
 };
 
 export default function HomePage() {
-	const token = useAppSelector(selectToken);
-
 	return (
 		<>
-			<Container pt="15px" mr="1.5" maxW="fit-content">
-				{!token && (
-					<>
-						<Link as={RouterLink} to="/user/sign-in">
-							<Button
-								as={Button}
-								size="md"
-								variant="ghost"
-								colorScheme="purple"
-							>
-								Sign In
-							</Button>
-						</Link>
-						<Link as={RouterLink} to="/user/sign-up/student">
-							<Button
-								as={Button}
-								variant="outline"
-								colorScheme="purple"
-							>
-								Sign Up
-							</Button>
-						</Link>
-					</>
-				)}
-				{token && <SignOutDialog />}
-			</Container>
 			<Center>
 				<Text fontSize="4xl" pt="20px">
 					Our project
