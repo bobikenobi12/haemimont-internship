@@ -62,7 +62,6 @@ export default function SignOutDialog() {
 								onClick={async () => {
 									try {
 										await signOut().unwrap();
-										onCloseSignout();
 										toast({
 											title: "Signed out successfully!",
 											description:
@@ -71,6 +70,7 @@ export default function SignOutDialog() {
 											duration: 5000,
 											isClosable: true,
 										});
+										onCloseSignout();
 									} catch (error: any) {
 										console.log(error);
 										toast({

@@ -95,7 +95,7 @@ export default function HomePage() {
 	return (
 		<>
 			<Container pt="15px" mr="1.5" maxW="fit-content">
-				{!token ? (
+				{!token && (
 					<>
 						<Link as={RouterLink} to="/sign-in">
 							<Button
@@ -117,9 +117,8 @@ export default function HomePage() {
 							</Button>
 						</Link>
 					</>
-				) : (
-					<SignOutDialog />
 				)}
+				{token && <SignOutDialog />}
 			</Container>
 			<Center>
 				<Text fontSize="4xl" pt="20px">
