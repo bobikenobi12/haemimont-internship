@@ -12,6 +12,7 @@ import UserProfilePage from "./pages/UserProfilePage";
 // Guards
 import RequireAuth from "./utils/RequireAuth";
 import PublicOutlet from "./utils/PublicOutlet";
+import CourseSignUpPage from "./pages/CourseSignUpPage";
 
 function App() {
 	return (
@@ -39,6 +40,7 @@ function App() {
 				<Route path="/" element={<HomePage />} />
 				<Route path="/terms-of-service" element={<TermsOfService />} />
 				<Route path="/privacy-policy" element={<PrivacyPolicy />} />
+				<Route path="/course-sign-up" element={<CourseSignUpPage/>} />
 				<Route path="*" element={<h1>Not found</h1>} />
 			</Routes>
 		</>

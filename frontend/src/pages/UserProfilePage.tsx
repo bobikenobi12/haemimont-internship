@@ -16,6 +16,7 @@ import {
 	Button,
 	Avatar,
 } from "@chakra-ui/react";
+import NavBar from "../components/NavBar";
 
 import UpdateProfileModal from "../components/UpdateProfileModal";
 import SignOutDialog from "../components/SignOutDialog";
@@ -23,6 +24,7 @@ import SignOutDialog from "../components/SignOutDialog";
 export default function UserProfilePage() {
 	return (
 		<>
+        <NavBar />
 			<Flex
 				w="100%"
 				direction={["column", "column", "column", "row"]}
