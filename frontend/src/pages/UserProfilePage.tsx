@@ -19,6 +19,7 @@ import {
 import NavBar from "../components/NavBar";
 
 import UpdateProfileModal from "../components/UpdateProfileModal";
+import ChangePasswordModal from "../components/ChangePasswordModal";
 import SignOutDialog from "../components/SignOutDialog";
 
 export default function UserProfilePage() {
@@ -77,6 +78,7 @@ export default function UserProfilePage() {
 					gap={5}
 				>
 					<UpdateProfileModal />
+					<ChangePasswordModal />
 					<SignOutDialog />
 				</Flex>
 			</Flex>
