@@ -22,6 +22,11 @@ export interface LoginRequest {
 	password: string;
 }
 
+export interface ChangePasswordRequest {
+	password: string;
+	currentPassword: string;
+}
+
 export const authApi = apiSlice.injectEndpoints({
 	endpoints: (builder) => ({
 		register: builder.mutation<any, RegisterRequest>({
@@ -52,11 +57,11 @@ export const authApi = apiSlice.injectEndpoints({
 				body: { email },
 			}),
 		}),
-		changePassword: builder.mutation<void, { password: string }>({
-			query: (password) => ({
+		changePassword: builder.mutation<void, ChangePasswordRequest>({
+			query: ({ password, currentPassword }) => ({
 				url: "user/changePassword",
 				method: "POST",
-				body: { password },
+				body: { password, currentPassword },
 			}),
 		}),
 		logout: builder.mutation<void, void>({

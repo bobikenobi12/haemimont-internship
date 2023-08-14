@@ -1,7 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { authApi } from "./authApiSlice";
 import type { RootState } from "../../app/store";
-
 export interface AuthState {
 	token: string | null;
 	email: string | null;
