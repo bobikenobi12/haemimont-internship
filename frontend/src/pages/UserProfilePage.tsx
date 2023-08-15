@@ -42,7 +42,6 @@ export default function UserProfilePage() {
 
 	const { error, isLoading } = useGetProfileQuery();
 
-	console.log(credit);
 	if (isLoading) {
 		return <Spinner />;
 	}
