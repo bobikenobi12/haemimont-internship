@@ -48,6 +48,7 @@ export const courseApi = apiSlice.injectEndpoints({
 				url: `courses/complete/${courseId}`,
 				method: "POST",
 			}),
+			invalidatesTags: ["Course"],
 		}),
 		getCompletedCourses: builder.query<
 			CourseResponse<Course>,
@@ -55,8 +56,9 @@ export const courseApi = apiSlice.injectEndpoints({
 		>({
 			query: ({ page = 1, pageSize = 10 }) => ({
 				url: "courses/completed",
-				body: { page, pageSize },
+				params: { page, pageSize },
 			}),
+			providesTags: ["Course"],
 		}),
 		getUncompletedCourses: builder.query<
 			CourseResponse<Course>,
@@ -66,6 +68,7 @@ export const courseApi = apiSlice.injectEndpoints({
 				url: "courses/uncompleted",
 				params: { page, pageSize },
 			}),
+			providesTags: ["Course"],
 		}),
 	}),
 });
