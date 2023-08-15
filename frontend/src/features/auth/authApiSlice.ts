@@ -89,16 +89,10 @@ export const authApi = apiSlice.injectEndpoints({
 				responseHandler: "text",
 			}),
 		}),
-		refreshToken: builder.mutation<Tokens, void>({
+		refreshToken: builder.query<Tokens, void>({
 			query: () => ({
 				url: "user/refresh/v1",
-				method: "POST",
-				headers: {
-					Authorization: `Bearer ${localStorage.getItem(
-						"refreshToken"
-					)}`,
-				},
-				responseHandler: "text",
+				method: "GET",
 			}),
 		}),
 	}),
