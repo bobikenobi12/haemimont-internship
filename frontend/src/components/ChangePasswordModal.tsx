@@ -73,6 +73,7 @@ export default function ChangePasswordModal() {
 		try {
 			await changePassword({
 				password: data.newPassword,
+				currentPassword: data.currentPassword,
 			}).unwrap();
 			toast({
 				title: "Password changed successfully",

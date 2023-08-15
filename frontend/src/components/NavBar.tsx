@@ -14,10 +14,18 @@ import {
 	useDisclosure,
 	useColorModeValue,
 	Stack,
+	Spinner,
 } from "@chakra-ui/react";
 
 import { useAppSelector } from "../app/hooks";
-import { selectToken } from "../features/auth/authSlice";
+import {
+	selectToken,
+	selectName,
+	selectCredit,
+	selectRole,
+} from "../features/auth/authSlice";
+
+import { usePrefetch } from "../features/auth/authApiSlice";
 
 import { useNavigate, Outlet, Link as RouterLink } from "react-router-dom";
 
@@ -25,7 +33,7 @@ import { HamburgerIcon, CloseIcon } from "@chakra-ui/icons";
 
 import SignOutDialog from "./SignOutDialog";
 import ThemeToggle from "./ThemeToggle";
-import { SearchBar } from "./SearchBar";
+import CreateCourseModal from "./CreateCourseModal";
 interface Props {
 	children: React.ReactNode;
 	href: string;
@@ -73,6 +81,11 @@ export default function NavBar() {
 	const { isOpen, onOpen, onClose } = useDisclosure();
 
 	const token = useAppSelector(selectToken);
+	const name = useAppSelector(selectName);
+	const credit = useAppSelector(selectCredit);
+	const role = useAppSelector(selectRole);
+
+	const prefetchUser = usePrefetch("getProfile");
 
 	return (
 		<>
@@ -108,8 +121,8 @@ export default function NavBar() {
 						justifyContent={"center"}
 						gap={4}
 					>
-						<SearchBar />
 						<ThemeToggle />
+						{token && role === "TEACHER" && <CreateCourseModal />}
 						{!token && (
 							<>
 								<Link
@@ -141,39 +154,47 @@ export default function NavBar() {
 							</>
 						)}
 						{token && (
-							<Flex alignItems={"center"}>
-								<Menu>
-									<MenuButton
-										as={Button}
-										rounded={"full"}
-										variant={"link"}
-										cursor={"pointer"}
-										minW={0}
-									>
-										<Avatar
-											size={"sm"}
-											src={
-												"https://images.unsplash.com/photo-1493666438817-866a91353ca9?ixlib=rb-0.3.5&q=80&fm=jpg&crop=faces&fit=crop&h=200&w=200&s=b616b2c5b373a80ffc9636ba24f7a4a9"
-											}
-										/>
-									</MenuButton>
-									<MenuList
-										justifyContent={"center"}
-										alignItems={"center"}
-									>
-										<MenuItem>Credits: 142</MenuItem>
+							<Menu onOpen={() => prefetchUser()}>
+								<MenuButton
+									as={Button}
+									rounded={"full"}
+									variant={"link"}
+									cursor={"pointer"}
+									minW={0}
+								>
+									{name ? (
+										<Avatar size={"sm"} name={name} />
+									) : (
+										<Avatar size={"sm"} />
+									)}
+								</MenuButton>
+								<MenuList
+									justifyContent={"center"}
+									alignItems={"center"}
+								>
+									{role === "STUDENT" && (
 										<MenuItem
 											as={RouterLink}
-											to="/user/profile"
+											to="/user/credit"
 										>
-											Profile
+											{credit !== null ? (
+												"Credit:" + credit
+											) : (
+												<Spinner />
+											)}
 										</MenuItem>
+									)}
+									<MenuItem
+										as={RouterLink}
+										to="/user/profile"
+									>
+										Profile
+									</MenuItem>
 
-										<MenuDivider />
-										<SignOutDialog />
-									</MenuList>
-								</Menu>
-							</Flex>
+									<MenuDivider />
+									<SignOutDialog />
+								</MenuList>
+							</Menu>
 						)}
 					</Flex>
 				</Flex>

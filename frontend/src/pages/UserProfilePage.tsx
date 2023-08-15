@@ -15,13 +15,42 @@ import {
 	AccordionIcon,
 	Button,
 	Avatar,
+	Spinner,
 } from "@chakra-ui/react";
 
 import UpdateProfileModal from "../components/UpdateProfileModal";
 import ChangePasswordModal from "../components/ChangePasswordModal";
 import SignOutDialog from "../components/SignOutDialog";
 
+import {
+	selectRole,
+	selectName,
+	selectEmail,
+	selectTimeCreated,
+	selectCredit,
+} from "../features/auth/authSlice";
+import { useAppSelector } from "../app/hooks";
+
+import { useGetProfileQuery } from "../features/auth/authApiSlice";
+
 export default function UserProfilePage() {
+	const role = useAppSelector(selectRole);
+	const name = useAppSelector(selectName);
+	const email = useAppSelector(selectEmail);
+	const timeCreated = useAppSelector(selectTimeCreated);
+	const credit = useAppSelector(selectCredit);
+
+	const { error, isLoading } = useGetProfileQuery();
+
+	console.log(credit);
+	if (isLoading) {
+		return <Spinner />;
+	}
+
+	if (error) {
+		return <Text>Error</Text>;
+	}
+
 	return (
 		<Flex
 			w="100%"
@@ -38,8 +67,12 @@ export default function UserProfilePage() {
 				p="20px"
 				gap={5}
 			>
-				<Heading color="#6065EA">Profile: </Heading>
-				<Avatar size="3xl"></Avatar>
+				<Heading>Profile: </Heading>
+				{name ? (
+					<Avatar size="2xl" name={name} />
+				) : (
+					<Spinner size="xl" />
+				)}
 				<Box w="100%">
 					<Card w="100%" boxShadow="md">
 						<CardBody>
@@ -48,21 +81,49 @@ export default function UserProfilePage() {
 									justifyContent="space-between"
 									alignItems="center"
 								>
-									<Text fontSize="xl">
-										Name: Cvetelina Petkova
-									</Text>
-									<Badge colorScheme="cyan">
-										{" "}
-										Instructor{" "}
-									</Badge>
+									{name ? (
+										<Text fontSize="xl">Name: {name}</Text>
+									) : (
+										<Spinner />
+									)}
+									{role === "STUDENT" ? (
+										<Badge colorScheme="blue">
+											Student
+										</Badge>
+									) : (
+										<Badge colorScheme="cyan">
+											Teacher
+										</Badge>
+									)}
 								</Flex>
 								<Box>
-									<Text fontSize="xl">
-										Email: gnr.gnfr@gmail.com
-									</Text>
+									{email ? (
+										<Text fontSize="xl">
+											Email: {email}
+										</Text>
+									) : (
+										<Spinner />
+									)}
 								</Box>
+								{role === "STUDENT" && (
+									<Box>
+										{credit != null ? (
+											<Text fontSize="xl">
+												Credits: {credit}
+											</Text>
+										) : (
+											<Spinner />
+										)}
+									</Box>
+								)}
 								<Box>
-									<Text fontSize="xl">Credits: 142</Text>
+									{timeCreated ? (
+										<Text fontSize="xl">
+											Time Created: {timeCreated}
+										</Text>
+									) : (
+										<Spinner />
+									)}
 								</Box>
 							</Stack>
 						</CardBody>

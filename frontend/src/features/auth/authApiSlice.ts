@@ -22,6 +22,19 @@ export interface LoginRequest {
 	password: string;
 }
 
+export interface ChangePasswordRequest {
+	password: string;
+	currentPassword: string;
+}
+
+export interface Profile {
+	email: string;
+	name: string;
+	role: Role;
+	timeCreated: string;
+	credit: number;
+}
+
 export const authApi = apiSlice.injectEndpoints({
 	endpoints: (builder) => ({
 		register: builder.mutation<any, RegisterRequest>({
@@ -38,12 +51,20 @@ export const authApi = apiSlice.injectEndpoints({
 				body: { email, password },
 			}),
 		}),
+		getProfile: builder.query<Profile, void>({
+			query: () => ({
+				url: "user/getProfile",
+				method: "GET",
+			}),
+			providesTags: ["Profile"],
+		}),
 		updateName: builder.mutation<void, { name: string }>({
 			query: (name) => ({
 				url: "user/updateName",
 				method: "POST",
 				body: { name },
 			}),
+			invalidatesTags: ["Profile"],
 		}),
 		changeEmail: builder.mutation<void, { email: string }>({
 			query: (email) => ({
@@ -51,13 +72,15 @@ export const authApi = apiSlice.injectEndpoints({
 				method: "POST",
 				body: { email },
 			}),
+			invalidatesTags: ["Profile"],
 		}),
-		changePassword: builder.mutation<void, { password: string }>({
-			query: (password) => ({
+		changePassword: builder.mutation<void, ChangePasswordRequest>({
+			query: ({ password, currentPassword }) => ({
 				url: "user/changePassword",
 				method: "POST",
-				body: { password },
+				body: { password, currentPassword },
 			}),
+			invalidatesTags: ["Profile"],
 		}),
 		logout: builder.mutation<void, void>({
 			query: () => ({
@@ -84,8 +107,10 @@ export const authApi = apiSlice.injectEndpoints({
 export const {
 	useRegisterMutation,
 	useLoginMutation,
+	useGetProfileQuery,
 	useUpdateNameMutation,
 	useChangeEmailMutation,
 	useChangePasswordMutation,
 	useLogoutMutation,
+	usePrefetch,
 } = authApi;
