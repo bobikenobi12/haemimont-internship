@@ -22,6 +22,7 @@ export interface CreateCourseRequest {
 	courseName: string;
 	description: string;
 	credit: number;
+	duration: number;
 }
 
 export interface PaginationRequest {
@@ -37,10 +38,10 @@ export interface CourseResponse<T> {
 export const courseApi = apiSlice.injectEndpoints({
 	endpoints: (builder) => ({
 		createCourse: builder.mutation<void, CreateCourseRequest>({
-			query: ({ courseName, description, credit }) => ({
+			query: ({ courseName, description, credit, duration }) => ({
 				url: "courses/create",
 				method: "POST",
-				body: { courseName, description, credit },
+				body: { courseName, description, credit, duration },
 			}),
 		}),
 		completeCourse: builder.mutation<void, { courseId: number }>({

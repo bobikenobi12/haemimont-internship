@@ -59,6 +59,14 @@ export default function CreateCourseModal() {
 			.max(500, {
 				message: "Course credit must be at most 500",
 			}),
+		duration: z.coerce
+			.number()
+			.min(1, {
+				message: "Course duration must be at least 1",
+			})
+			.max(500, {
+				message: "Course duration must be at most 500",
+			}),
 	});
 
 	type CreateCourse = z.infer<typeof schema>;
@@ -66,6 +74,7 @@ export default function CreateCourseModal() {
 	const {
 		register,
 		handleSubmit,
+		reset,
 		formState: { errors, isSubmitting },
 	} = useForm<CreateCourse>({
 		resolver: zodResolver(schema),
@@ -77,6 +86,7 @@ export default function CreateCourseModal() {
 				courseName: data.name,
 				description: data.description,
 				credit: data.credit,
+				duration: data.duration,
 			}).unwrap();
 			toast({
 				title: "Course created",
@@ -84,6 +94,7 @@ export default function CreateCourseModal() {
 				duration: 5000,
 				isClosable: true,
 			});
+			reset();
 			onClose();
 		} catch (err: any) {
 			toast({
@@ -162,6 +173,26 @@ export default function CreateCourseModal() {
 										mr={1}
 									/>
 									{errors.credit?.message}
+								</FormErrorMessage>
+							</FormControl>
+
+							<FormControl isInvalid={!!errors.duration}>
+								<FormLabel htmlFor="duration">
+									Duration
+								</FormLabel>
+								<Input
+									id="duration"
+									placeholder="Course Duration"
+									{...register("duration")}
+									type="number"
+								/>
+								<FormErrorMessage>
+									<Icon
+										as={InfoIcon}
+										color="red.500"
+										mr={1}
+									/>
+									{errors.duration?.message}
 								</FormErrorMessage>
 							</FormControl>
 
