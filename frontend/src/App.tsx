@@ -4,7 +4,7 @@ import { Role } from "./features/auth/authApiSlice";
 // Pages
 import SignUpPage from "./pages/SignUpPage";
 import SignInPage from "./pages/SignInPage";
-import HomePage from "./pages/HomePage";
+import CoursesPage from "./pages/CoursesPage";
 import TermsOfService from "./pages/TermsOfService";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import UserProfilePage from "./pages/UserProfilePage";
@@ -41,7 +41,7 @@ function App() {
 					</Route>
 
 					{/* Public routes */}
-					<Route path="/" element={<HomePage />} />
+					<Route path="/" element={<CoursesPage />} />
 					<Route
 						path="/course-sign-up"
 						element={<CourseSignUpPage />}

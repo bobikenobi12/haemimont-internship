@@ -13,12 +13,14 @@ export interface Teacher {
 export interface Course {
 	courseId: number;
 	courseName: string;
+	description: string;
 	credit: number;
 	teacher: Teacher;
 }
 
 export interface CreateCourseRequest {
 	courseName: string;
+	description: string;
 	credit: number;
 }
 
@@ -27,33 +29,42 @@ export interface PaginationRequest {
 	pageSize: number;
 }
 
+export interface CourseResponse<T> {
+	courses: T[];
+	size: number;
+}
+
 export const courseApi = apiSlice.injectEndpoints({
 	endpoints: (builder) => ({
 		createCourse: builder.mutation<void, CreateCourseRequest>({
-			query: ({ courseName, credit }) => ({
+			query: ({ courseName, description, credit }) => ({
 				url: "courses/create",
 				method: "POST",
-				body: { courseName, credit },
+				body: { courseName, description, credit },
 			}),
 		}),
 		completeCourse: builder.mutation<void, { courseId: number }>({
-			query: (courseId) => ({
+			query: ({ courseId }) => ({
 				url: `courses/complete/${courseId}`,
 				method: "POST",
 			}),
 		}),
-		getCompletedCourses: builder.mutation<Course, PaginationRequest>({
-			query: ({ page, pageSize }) => ({
+		getCompletedCourses: builder.query<
+			CourseResponse<Course>,
+			PaginationRequest
+		>({
+			query: ({ page = 1, pageSize = 10 }) => ({
 				url: "courses/completed",
-				method: "POST",
 				body: { page, pageSize },
 			}),
 		}),
-		getUncompletedCourses: builder.mutation<Course, PaginationRequest>({
-			query: ({ page, pageSize }) => ({
+		getUncompletedCourses: builder.query<
+			CourseResponse<Course>,
+			PaginationRequest
+		>({
+			query: ({ page = 1, pageSize = 10 }) => ({
 				url: "courses/uncompleted",
-				method: "POST",
-				body: { page, pageSize },
+				params: { page, pageSize },
 			}),
 		}),
 	}),
@@ -62,6 +73,6 @@ export const courseApi = apiSlice.injectEndpoints({
 export const {
 	useCreateCourseMutation,
 	useCompleteCourseMutation,
-	useGetCompletedCoursesMutation,
-	useGetUncompletedCoursesMutation,
+	useGetCompletedCoursesQuery,
+	useGetUncompletedCoursesQuery,
 } = courseApi;
