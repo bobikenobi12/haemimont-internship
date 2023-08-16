@@ -5,9 +5,15 @@ import { RootState } from "../../app/store";
 
 const baseQuery = fetchBaseQuery({
 	baseUrl: import.meta.env.VITE_API_URL as string,
-	prepareHeaders: (headers, { getState }) => {
+	prepareHeaders: (headers, { getState, endpoint }) => {
+		if (endpoint?.includes("refreshToken")) {
+			headers.set(
+				"Authorization",
+				`Bearer ${localStorage.getItem("refreshToken")}`
+			);
+		}
 		const token = (getState() as RootState).auth.token;
-		if (token) {
+		if (token && endpoint?.includes("refreshToken") === false) {
 			headers.set("Authorization", `Bearer ${token}`);
 		}
 		return headers;
@@ -25,8 +31,7 @@ const baseQueryWithReauth = async (args: any, api: any, extraOptions: any) => {
 			api.dispatch(logOut());
 			return result;
 		}
-		const { token, refreshToken } = refreshResult.data.tokens;
-		console.log(token, refreshToken);
+		const { token, refreshToken } = refreshResult.data;
 		api.dispatch(setToken(token));
 		localStorage.setItem("refreshToken", refreshToken);
 		return baseQuery(args, api, extraOptions);

@@ -12,8 +12,7 @@ const appReducer = combineReducers({
 });
 
 const rootReducer = (state: any, action: any) => {
-	if (action.type === "auth/logout") {
-		console.log("logout");
+	if (action.payload === "Logged out!") {
 		state = undefined;
 	}
 	if (action.type === "auth/logOut") {

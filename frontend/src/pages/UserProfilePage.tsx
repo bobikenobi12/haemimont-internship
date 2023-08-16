@@ -40,16 +40,7 @@ export default function UserProfilePage() {
 	const timeCreated = useAppSelector(selectTimeCreated);
 	const credit = useAppSelector(selectCredit);
 
-	const { error, isLoading } = useGetProfileQuery();
-
-	console.log(credit);
-	if (isLoading) {
-		return <Spinner />;
-	}
-
-	if (error) {
-		return <Text>Error</Text>;
-	}
+	useGetProfileQuery();
 
 	return (
 		<Flex
