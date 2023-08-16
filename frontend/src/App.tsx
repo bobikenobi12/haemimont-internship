@@ -9,6 +9,7 @@ import TermsOfService from "./pages/TermsOfService";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import UserProfilePage from "./pages/UserProfilePage";
 import CourseSignUpPage from "./pages/CourseSignUpPage";
+import CreateCoursePage from "./pages/CreateCoursePage";
 
 // Components
 import NavBar from "./components/NavBar";
@@ -50,6 +51,7 @@ function App() {
 				<Route path="/terms-of-service" element={<TermsOfService />} />
 				<Route path="/privacy-policy" element={<PrivacyPolicy />} />
 				<Route path="/course-sign-up" element={<CourseSignUpPage />} />
+				<Route path="/create-course" element={<CreateCoursePage/>}/>
 				<Route path="*" element={<h1>Not found</h1>} />
 			</Routes>
 		</>
