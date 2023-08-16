@@ -49,7 +49,7 @@ export const courseApi = apiSlice.injectEndpoints({
 				url: `courses/complete/${courseId}`,
 				method: "POST",
 			}),
-			invalidatesTags: ["Course"],
+			invalidatesTags: ["Course", "Profile"],
 		}),
 		getCompletedCourses: builder.query<
 			CourseResponse<Course>,
