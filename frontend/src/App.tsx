@@ -5,10 +5,10 @@ import { Role } from "./features/auth/authApiSlice";
 import SignUpPage from "./pages/SignUpPage";
 import SignInPage from "./pages/SignInPage";
 import CoursesPage from "./pages/CoursesPage";
+import CoursePage from "./pages/CoursePage";
 import TermsOfService from "./pages/TermsOfService";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import UserProfilePage from "./pages/UserProfilePage";
-import CourseSignUpPage from "./pages/CourseSignUpPage";
 import CreateCoursePage from "./pages/CreateCoursePage";
 
 // Components
@@ -42,16 +42,16 @@ function App() {
 					</Route>
 
 					{/* Public routes */}
-					<Route path="/" element={<CoursesPage />} />
+					<Route path="/courses" element={<CoursesPage />} />
+					<Route path="/courses/:courseId" element={<CoursePage />} />
+					<Route path="/course-sign-up" element={<CoursePage />} />
 					<Route
-						path="/course-sign-up"
-						element={<CourseSignUpPage />}
+						path="/create-course"
+						element={<CreateCoursePage />}
 					/>
 				</Route>
 				<Route path="/terms-of-service" element={<TermsOfService />} />
 				<Route path="/privacy-policy" element={<PrivacyPolicy />} />
-				<Route path="/course-sign-up" element={<CourseSignUpPage />} />
-				<Route path="/create-course" element={<CreateCoursePage/>}/>
 				<Route path="*" element={<h1>Not found</h1>} />
 			</Routes>
 		</>

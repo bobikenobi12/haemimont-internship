@@ -15,7 +15,10 @@ export interface Course {
 	courseName: string;
 	description: string;
 	credit: number;
+	duration: number;
 	teacher: Teacher;
+	picturePath: string;
+	studentCount: number;
 }
 
 export interface CreateCourseRequest {
@@ -44,6 +47,22 @@ export const courseApi = apiSlice.injectEndpoints({
 				body: { courseName, description, credit, duration },
 			}),
 		}),
+		setPicture: builder.mutation<
+			void,
+			{ courseId: number; formData: FormData }
+		>({
+			query: ({ courseId, formData }) => ({
+				url: `courses/setPicture/${courseId}`,
+				method: "POST",
+				body: formData,
+			}),
+		}),
+		joinCourse: builder.mutation<void, { courseId: number }>({
+			query: ({ courseId }) => ({
+				url: `courses/sign/${courseId}`,
+				method: "POST",
+			}),
+		}),
 		completeCourse: builder.mutation<void, { courseId: number }>({
 			query: ({ courseId }) => ({
 				url: `courses/complete/${courseId}`,
@@ -61,6 +80,15 @@ export const courseApi = apiSlice.injectEndpoints({
 			}),
 			providesTags: ["Course"],
 		}),
+		getAllCourses: builder.query<CourseResponse<Course>, PaginationRequest>(
+			{
+				query: ({ page = 1, pageSize = 10 }) => ({
+					url: "courses/findAll",
+					params: { page, pageSize },
+				}),
+				providesTags: ["Course"],
+			}
+		),
 		getUncompletedCourses: builder.query<
 			CourseResponse<Course>,
 			PaginationRequest
@@ -71,11 +99,31 @@ export const courseApi = apiSlice.injectEndpoints({
 			}),
 			providesTags: ["Course"],
 		}),
+		getTeacherCourses: builder.query<
+			CourseResponse<Course>,
+			PaginationRequest
+		>({
+			query: ({ page = 1, pageSize = 10 }) => ({
+				url: "courses/findMyCourses",
+				params: { page, pageSize },
+			}),
+			providesTags: ["Course"],
+		}),
+		editCourse: builder.mutation<void, { courseId: number }>({
+			query: ({ courseId }) => ({
+				url: `courses/edit`,
+				method: "POST",
+				body: { courseId },
+			}),
+			invalidatesTags: ["Course"],
+		}),
 	}),
 });
 
 export const {
 	useCreateCourseMutation,
+	useSetPictureMutation,
+	useJoinCourseMutation,
 	useCompleteCourseMutation,
 	useGetCompletedCoursesQuery,
 	useGetUncompletedCoursesQuery,

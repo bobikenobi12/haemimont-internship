@@ -56,6 +56,7 @@ export const authApi = apiSlice.injectEndpoints({
 				url: "user/getProfile",
 				method: "GET",
 			}),
+			keepUnusedDataFor: 60 * 60 * 1000, // 1 hour
 			providesTags: ["Profile"],
 		}),
 		updateName: builder.mutation<void, { name: string }>({

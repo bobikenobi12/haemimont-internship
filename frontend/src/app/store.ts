@@ -2,12 +2,14 @@ import { configureStore, combineReducers } from "@reduxjs/toolkit";
 
 // slices
 import { authSlice } from "../features/auth/authSlice";
+import { courseSlice } from "../features/courses/courseSlice";
 
 // api
 import { apiSlice } from "./api/apiSlice";
 
 const appReducer = combineReducers({
 	auth: authSlice.reducer,
+	course: courseSlice.reducer,
 	[apiSlice.reducerPath]: apiSlice.reducer,
 });
 

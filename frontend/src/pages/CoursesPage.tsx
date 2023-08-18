@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-import { Flex, Box, Button, Select } from "@chakra-ui/react";
+import { Flex, Box, Button, Select, Text } from "@chakra-ui/react";
 
 import { useGetProfileQuery } from "../features/auth/authApiSlice";
 
@@ -29,6 +29,9 @@ export default function CoursesPage() {
 	return (
 		<>
 			{isFetching && <div>Updating...</div>}
+			<Box textAlign={"center"} mb={4}>
+				<Text fontSize={"2xl"}>Results: {data.size}</Text>
+			</Box>
 			<Flex
 				wrap={"wrap"}
 				justify={"center"}
@@ -42,7 +45,10 @@ export default function CoursesPage() {
 						courseName,
 						description,
 						credit,
+						duration,
 						teacher,
+						picturePath,
+						studentCount,
 					}: CourseProps) => (
 						<Course
 							key={courseId}
@@ -50,7 +56,10 @@ export default function CoursesPage() {
 							courseName={courseName}
 							description={description}
 							credit={credit}
+							duration={duration}
 							teacher={teacher}
+							picturePath={picturePath}
+							studentCount={studentCount}
 						/>
 					)
 				)}
