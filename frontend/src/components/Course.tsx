@@ -10,18 +10,17 @@ import {
 	Box,
 } from "@chakra-ui/react";
 
-import { useCompleteCourseMutation } from "../features/courses/courseApiSlice";
+import { useNavigate } from "react-router-dom";
 
 import type { Course } from "../features/courses/courseApiSlice";
 
 export default function Course({
 	courseId,
 	courseName,
-	description,
 	credit,
 	teacher,
 }: Course) {
-	const [completeCourse, { isLoading }] = useCompleteCourseMutation();
+	const navigate = useNavigate();
 
 	return (
 		<Card
@@ -49,10 +48,9 @@ export default function Course({
 						<Button
 							colorScheme="blue"
 							size="sm"
-							onClick={() => completeCourse({ courseId })}
-							isLoading={isLoading}
+							onClick={() => navigate(`/courses/${courseId}`)}
 						>
-							Complete
+							View Course
 						</Button>
 					</CardFooter>
 				</CardBody>
