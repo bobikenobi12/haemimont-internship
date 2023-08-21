@@ -1,3 +1,5 @@
+import { useEffect, useState } from "react";
+
 import {
 	Flex,
 	Text,
@@ -8,14 +10,12 @@ import {
 	Box,
 	Stack,
 	StackDivider,
-	Accordion,
-	AccordionItem,
-	AccordionButton,
-	AccordionPanel,
-	AccordionIcon,
-	Button,
-	Avatar,
 	Spinner,
+	Tabs,
+	TabList,
+	TabPanels,
+	Tab,
+	TabPanel,
 } from "@chakra-ui/react";
 
 import UpdateProfileModal from "../components/UpdateProfileModal";
@@ -33,6 +33,9 @@ import { useAppSelector } from "../app/hooks";
 
 import { useGetProfileQuery } from "../features/auth/authApiSlice";
 
+import ProfilePictureModal from "../components/ProfilePictureModal";
+import ProfileCourseList from "../components/ProfileCourseList";
+
 export default function UserProfilePage() {
 	const role = useAppSelector(selectRole);
 	const name = useAppSelector(selectName);
@@ -40,7 +43,21 @@ export default function UserProfilePage() {
 	const timeCreated = useAppSelector(selectTimeCreated);
 	const credit = useAppSelector(selectCredit);
 
+	const [skipQueries, setSkipQueries] = useState({
+		skipCompleted: role === "STUDENT" ? false : true,
+		skipEnrolled: true,
+		skipTeacher: role === "TEACHER" ? false : true,
+	});
+
 	useGetProfileQuery();
+
+	useEffect(() => {
+		setSkipQueries({
+			skipCompleted: true,
+			skipEnrolled: role === "STUDENT" ? false : true,
+			skipTeacher: role === "TEACHER" ? false : true,
+		});
+	}, [role]);
 
 	return (
 		<Flex
@@ -59,11 +76,7 @@ export default function UserProfilePage() {
 				gap={5}
 			>
 				<Heading>Profile: </Heading>
-				{name ? (
-					<Avatar size="2xl" name={name} />
-				) : (
-					<Spinner size="xl" />
-				)}
+				{name ? <ProfilePictureModal /> : <Spinner size="xl" />}
 				<Box w="100%">
 					<Card w="100%" boxShadow="md">
 						<CardBody>
@@ -142,42 +155,83 @@ export default function UserProfilePage() {
 					Courses:{" "}
 				</Heading>
 				<Box overflowY="scroll" h="100%">
-					<Card>
-						<Stack>
-							<CardBody>
-								<Accordion defaultIndex={[0]}>
-									{[1, 2, 3, 4, 5, 6, 7, 8, 9].map(
-										(course) => (
-											<AccordionItem key={course}>
-												<AccordionButton>
-													<Box
-														flex="1"
-														textAlign="left"
-													>
-														Course Name
-													</Box>
-													<AccordionIcon />
-												</AccordionButton>
-												<AccordionPanel pb={4}>
-													<Text>
-														{" "}
-														Here is the description
-														of the course.
-													</Text>
-													<Button
-														colorScheme="blue"
-														mt={4}
-													>
-														View Course
-													</Button>
-												</AccordionPanel>
-											</AccordionItem>
-										)
-									)}
-								</Accordion>
-							</CardBody>
-						</Stack>
-					</Card>
+					<Tabs>
+						<TabList>
+							{role === "STUDENT" ? (
+								<>
+									<Tab
+										onClick={() =>
+											setSkipQueries({
+												skipCompleted: true,
+												skipEnrolled: false,
+												skipTeacher: true,
+											})
+										}
+									>
+										Enrolled Courses
+									</Tab>
+									<Tab
+										onClick={() => {
+											setSkipQueries({
+												skipCompleted: false,
+												skipEnrolled: true,
+												skipTeacher: true,
+											});
+										}}
+									>
+										Completed Courses
+									</Tab>
+								</>
+							) : (
+								<Tab
+									onClick={() =>
+										setSkipQueries({
+											skipCompleted: true,
+											skipEnrolled: true,
+											skipTeacher: false,
+										})
+									}
+								>
+									Created Courses
+								</Tab>
+							)}
+						</TabList>
+						{role === "STUDENT" && (
+							<TabPanels>
+								<TabPanel>
+									<ProfileCourseList
+										skipCompleted={
+											skipQueries.skipCompleted
+										}
+										skipEnrolled={skipQueries.skipEnrolled}
+										skipTeacher={skipQueries.skipTeacher}
+									/>
+								</TabPanel>
+								<TabPanel>
+									<ProfileCourseList
+										skipCompleted={
+											skipQueries.skipCompleted
+										}
+										skipEnrolled={skipQueries.skipEnrolled}
+										skipTeacher={skipQueries.skipTeacher}
+									/>
+								</TabPanel>
+							</TabPanels>
+						)}
+						{role === "TEACHER" && (
+							<TabPanels>
+								<TabPanel>
+									<ProfileCourseList
+										skipCompleted={
+											skipQueries.skipCompleted
+										}
+										skipEnrolled={skipQueries.skipEnrolled}
+										skipTeacher={skipQueries.skipTeacher}
+									/>
+								</TabPanel>
+							</TabPanels>
+						)}
+					</Tabs>
 				</Box>
 			</Box>
 		</Flex>

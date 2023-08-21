@@ -23,6 +23,7 @@ import {
 	selectName,
 	selectCredit,
 	selectRole,
+	selectPicturePath,
 } from "../features/auth/authSlice";
 
 import { usePrefetch } from "../features/auth/authApiSlice";
@@ -84,6 +85,7 @@ export default function NavBar() {
 	const name = useAppSelector(selectName);
 	const credit = useAppSelector(selectCredit);
 	const role = useAppSelector(selectRole);
+	const picturePath = useAppSelector(selectPicturePath);
 
 	const prefetchUser = usePrefetch("getProfile");
 
@@ -162,10 +164,18 @@ export default function NavBar() {
 									cursor={"pointer"}
 									minW={0}
 								>
-									{name ? (
+									{picturePath ? (
+										<Avatar
+											size={"sm"}
+											src={
+												import.meta.env.VITE_API_URL +
+												picturePath
+											}
+										/>
+									) : name ? (
 										<Avatar size={"sm"} name={name} />
 									) : (
-										<Avatar size={"sm"} />
+										<Spinner />
 									)}
 								</MenuButton>
 								<MenuList

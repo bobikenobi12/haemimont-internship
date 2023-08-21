@@ -19,6 +19,7 @@ export interface Course {
 	teacher: Teacher;
 	picturePath: string;
 	studentCount: number;
+	enrolled?: boolean;
 }
 
 export interface CreateCourseRequest {
@@ -31,6 +32,7 @@ export interface CreateCourseRequest {
 export interface PaginationRequest {
 	page: number;
 	pageSize: number;
+	completed?: boolean;
 }
 
 export interface CourseResponse<T> {
@@ -49,12 +51,12 @@ export const courseApi = apiSlice.injectEndpoints({
 		}),
 		setPicture: builder.mutation<
 			void,
-			{ courseId: number; formData: FormData }
+			{ courseId: number; formdata: FormData }
 		>({
-			query: ({ courseId, formData }) => ({
+			query: ({ courseId, formdata }) => ({
 				url: `courses/setPicture/${courseId}`,
 				method: "POST",
-				body: formData,
+				body: formdata,
 			}),
 		}),
 		joinCourse: builder.mutation<void, { courseId: number }>({
@@ -74,9 +76,9 @@ export const courseApi = apiSlice.injectEndpoints({
 			CourseResponse<Course>,
 			PaginationRequest
 		>({
-			query: ({ page = 1, pageSize = 10 }) => ({
+			query: ({ page = 1, pageSize = 10, completed }) => ({
 				url: "courses/completed",
-				params: { page, pageSize },
+				params: { page, pageSize, completed },
 			}),
 			providesTags: ["Course"],
 		}),
@@ -109,6 +111,12 @@ export const courseApi = apiSlice.injectEndpoints({
 			}),
 			providesTags: ["Course"],
 		}),
+		getCourseById: builder.query<Course, { courseId: number }>({
+			query: ({ courseId }) => ({
+				url: `courses/findCourseById/${courseId}`,
+			}),
+			providesTags: ["Course"],
+		}),
 		editCourse: builder.mutation<void, { courseId: number }>({
 			query: ({ courseId }) => ({
 				url: `courses/edit`,
@@ -127,4 +135,8 @@ export const {
 	useCompleteCourseMutation,
 	useGetCompletedCoursesQuery,
 	useGetUncompletedCoursesQuery,
+	useGetAllCoursesQuery,
+	useGetTeacherCoursesQuery,
+	useGetCourseByIdQuery,
+	useEditCourseMutation,
 } = courseApi;

@@ -12,23 +12,39 @@ import {
 
 import { useParams } from "react-router-dom";
 
-import { selectCourse } from "../features/courses/courseSlice";
-import { useAppSelector } from "../app/hooks";
+import { useGetCourseByIdQuery } from "../features/courses/courseApiSlice";
 
-import { useJoinCourseMutation } from "../features/courses/courseApiSlice";
+import { useAppSelector } from "../app/hooks";
+import { selectRole } from "../features/auth/authSlice";
+
+import {
+	useJoinCourseMutation,
+	useCompleteCourseMutation,
+} from "../features/courses/courseApiSlice";
 
 export default function CoursePage() {
-	const [joinCourse, { isLoading }] = useJoinCourseMutation();
+	const [joinCourse, { isLoading: isLoadingJoinCourse }] =
+		useJoinCourseMutation();
+	const [completeCourse, { isLoading: isLoadingCompleteCourse }] =
+		useCompleteCourseMutation();
+
 	const toast = useToast();
+	const role = useAppSelector(selectRole);
 
 	const { courseId } = useParams();
 
 	if (!courseId) return <div>Course not found</div>;
 
-	const course = useAppSelector((state) =>
-		selectCourse(state, parseInt(courseId ?? ""))
-	);
+	const {
+		data: course,
+		error,
+		isLoading,
+	} = useGetCourseByIdQuery({
+		courseId: parseInt(courseId),
+	});
 
+	if (error) return <div>Failed to load course</div>;
+	if (isLoading) return <div>Loading...</div>;
 	if (!course) return <div>Course not found</div>;
 
 	return (
@@ -40,7 +56,9 @@ export default function CoursePage() {
 			>
 				<Image
 					objectFit="cover"
-					src={course.picturePath}
+					maxH={250}
+					maxW={250}
+					src={`${import.meta.env.VITE_API_URL}${course.picturePath}`}
 					alt="Course Logo"
 					w={{ base: "100%", sm: "40%" }}
 				/>
@@ -60,7 +78,9 @@ export default function CoursePage() {
 								lg: "row",
 							}}
 						>
-							<Text fontSize="xl">{course.duration}</Text>
+							<Text fontSize="xl">
+								Duration: {course.duration}h
+							</Text>
 							<Text fontSize="xl">
 								Instructor: {course.teacher.name}
 							</Text>
@@ -73,10 +93,42 @@ export default function CoursePage() {
 				<CardBody>
 					<Text fontSize="lg">{course.description}</Text>
 					<Center>
+						{role === "STUDENT" ? (
+							<Button
+								colorScheme="purple"
+								isLoading={isLoadingCompleteCourse}
+								isDisabled={isLoadingCompleteCourse}
+								onClick={async () => {
+									try {
+										await completeCourse({
+											courseId: course.courseId,
+										}).unwrap();
+										toast({
+											title: "Course completed",
+											status: "success",
+											duration: 5000,
+											isClosable: true,
+										});
+									} catch (err: any) {
+										toast({
+											title: "Error",
+											description: err.message,
+											status: "error",
+											duration: 5000,
+											isClosable: true,
+										});
+									}
+								}}
+							>
+								Complete the course
+							</Button>
+						) : (
+							<></>
+						)}
 						<Button
 							colorScheme="purple"
-							isLoading={isLoading}
-							isDisabled={isLoading}
+							isLoading={isLoadingJoinCourse}
+							isDisabled={isLoadingJoinCourse}
 							onClick={async () => {
 								try {
 									await joinCourse({

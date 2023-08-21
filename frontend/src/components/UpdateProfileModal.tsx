@@ -26,11 +26,15 @@ import {
 	useUpdateNameMutation,
 } from "../features/auth/authApiSlice";
 
+import { useAppDispatch } from "../app/hooks";
+import { logOut } from "../features/auth/authSlice";
+
 export default function UpdateProfileModal() {
 	const [updateName, { isLoading: isUpdatingName }] = useUpdateNameMutation();
 	const [changeEmail, { isLoading: isChangingEmail }] =
 		useChangeEmailMutation();
 
+	const dispatch = useAppDispatch();
 	const toast = useToast();
 	const { isOpen, onOpen, onClose } = useDisclosure();
 
@@ -77,7 +81,9 @@ export default function UpdateProfileModal() {
 
 	const handleUpdateName = async (data: UpdateNameFormValues) => {
 		try {
-			await updateName(data).unwrap();
+			await updateName({
+				name: data.name,
+			}).unwrap();
 			toast({
 				title: "Name updated",
 				description: "Your name has been updated successfully",
@@ -98,7 +104,9 @@ export default function UpdateProfileModal() {
 
 	const handleChangeEmail = async (data: ChangeEmailFormValues) => {
 		try {
-			await changeEmail(data).unwrap();
+			await changeEmail({
+				email: data.email,
+			}).unwrap();
 			toast({
 				title: "Email changed",
 				description: "Your email has been changed successfully",
@@ -106,6 +114,7 @@ export default function UpdateProfileModal() {
 				duration: 5000,
 				isClosable: true,
 			});
+			dispatch(logOut());
 		} catch {
 			toast({
 				title: "Error",
