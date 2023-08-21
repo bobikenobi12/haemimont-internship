@@ -31,6 +31,7 @@ export interface CreateCourseRequest {
 export interface PaginationRequest {
 	page: number;
 	pageSize: number;
+	completed?: boolean;
 }
 
 export interface CourseResponse<T> {
@@ -109,6 +110,12 @@ export const courseApi = apiSlice.injectEndpoints({
 			}),
 			providesTags: ["Course"],
 		}),
+		getCourseById: builder.query<Course, { courseId: number }>({
+			query: ({ courseId }) => ({
+				url: `courses/findCourseById/${courseId}`,
+			}),
+			providesTags: ["Course"],
+		}),
 		editCourse: builder.mutation<void, { courseId: number }>({
 			query: ({ courseId }) => ({
 				url: `courses/edit`,
@@ -127,4 +134,8 @@ export const {
 	useCompleteCourseMutation,
 	useGetCompletedCoursesQuery,
 	useGetUncompletedCoursesQuery,
+	useGetAllCoursesQuery,
+	useGetTeacherCoursesQuery,
+	useGetCourseByIdQuery,
+	useEditCourseMutation,
 } = courseApi;
