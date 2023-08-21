@@ -10,6 +10,7 @@ export interface AuthState {
 	role: Role | null;
 	timeCreated: string | null;
 	credit: number | null;
+	picturePath: string | null;
 }
 
 const initialState: AuthState = {
@@ -19,6 +20,7 @@ const initialState: AuthState = {
 	role: null,
 	timeCreated: null,
 	credit: null,
+	picturePath: null,
 };
 
 export const authSlice = createSlice({
@@ -59,6 +61,7 @@ export const authSlice = createSlice({
 				state.role = action.payload.role;
 				state.timeCreated = action.payload.timeCreated;
 				state.credit = action.payload.credit;
+				state.picturePath = action.payload.picturePath;
 			}
 		);
 		builder.addMatcher(authApi.endpoints.logout.matchFulfilled, (state) => {
@@ -77,6 +80,7 @@ export const selectName = (state: RootState) => state.auth.name;
 export const selectRole = (state: RootState) => state.auth.role;
 export const selectTimeCreated = (state: RootState) => state.auth.timeCreated;
 export const selectCredit = (state: RootState) => state.auth.credit;
+export const selectPicturePath = (state: RootState) => state.auth.picturePath;
 export const selectAuthState = (state: RootState) => state.auth;
 
 export default authSlice.reducer;

@@ -14,7 +14,6 @@ import {
 	AccordionPanel,
 	AccordionIcon,
 	Button,
-	Avatar,
 	Spinner,
 } from "@chakra-ui/react";
 
@@ -32,6 +31,8 @@ import {
 import { useAppSelector } from "../app/hooks";
 
 import { useGetProfileQuery } from "../features/auth/authApiSlice";
+
+import ProfilePictureModal from "../components/ProfilePictureModal";
 
 export default function UserProfilePage() {
 	const role = useAppSelector(selectRole);
@@ -59,11 +60,7 @@ export default function UserProfilePage() {
 				gap={5}
 			>
 				<Heading>Profile: </Heading>
-				{name ? (
-					<Avatar size="2xl" name={name} />
-				) : (
-					<Spinner size="xl" />
-				)}
+				{name ? <ProfilePictureModal /> : <Spinner size="xl" />}
 				<Box w="100%">
 					<Card w="100%" boxShadow="md">
 						<CardBody>

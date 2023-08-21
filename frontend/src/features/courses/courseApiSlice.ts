@@ -49,12 +49,12 @@ export const courseApi = apiSlice.injectEndpoints({
 		}),
 		setPicture: builder.mutation<
 			void,
-			{ courseId: number; formData: FormData }
+			{ courseId: number; formdata: FormData }
 		>({
-			query: ({ courseId, formData }) => ({
+			query: ({ courseId, formdata }) => ({
 				url: `courses/setPicture/${courseId}`,
 				method: "POST",
-				body: formData,
+				body: formdata,
 			}),
 		}),
 		joinCourse: builder.mutation<void, { courseId: number }>({

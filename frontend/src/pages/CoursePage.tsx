@@ -40,7 +40,7 @@ export default function CoursePage() {
 			>
 				<Image
 					objectFit="cover"
-					src={course.picturePath}
+					src={`${import.meta.env.VITE_API_URL}${course.picturePath}`}
 					alt="Course Logo"
 					w={{ base: "100%", sm: "40%" }}
 				/>

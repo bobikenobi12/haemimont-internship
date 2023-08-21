@@ -21,14 +21,13 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, SubmitHandler } from "react-hook-form";
 
 import {
-	Course,
 	useCreateCourseMutation,
 	useSetPictureMutation,
 } from "../features/courses/courseApiSlice";
 
 import FileUpload from "./FileUpload";
 
-const MB_BYTES = 500000;
+const MB_BYTES = 1000000;
 const ACCEPTED_MIME_TYPES = [
 	"image/jpeg",
 	"image/jpg",
@@ -112,6 +111,7 @@ export default function CreateCourseForm({
 		register,
 		handleSubmit,
 		reset,
+		getValues,
 		formState: { errors, isSubmitting },
 	} = useForm<CreateCourse>({
 		resolver: zodResolver(schema),
@@ -133,7 +133,7 @@ export default function CreateCourseForm({
 				duration: data.duration,
 			}).unwrap()) as any;
 			let formdata = new FormData();
-			formdata.append("file", data.image, data.image.name);
+			formdata.append("file", data.image);
 			await setPicture({ courseId, formdata }).unwrap();
 			toast({
 				title: "Course created",
@@ -209,12 +209,12 @@ export default function CreateCourseForm({
 			<FormControl isInvalid={!!errors.image} isRequired>
 				<FormLabel>{"File input"}</FormLabel>
 				<FileUpload onDrop={onDrop} />
-				{/* {file && (
+				{getValues("image") && (
 					<Box mt={4}>
-						<Image src={URL.createObjectURL(file)} />
+						<Image src={URL.createObjectURL(getValues("image"))} />
 					</Box>
-				)} */}
-				<FormErrorMessage>
+				)}
+				<FormErrorMessage noOfLines={2}>
 					{errors.image && (errors?.image.message as string)}
 				</FormErrorMessage>
 			</FormControl>

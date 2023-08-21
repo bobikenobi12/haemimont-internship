@@ -33,6 +33,7 @@ export interface Profile {
 	role: Role;
 	timeCreated: string;
 	credit: number;
+	picturePath: string;
 }
 
 export const authApi = apiSlice.injectEndpoints({
@@ -59,8 +60,16 @@ export const authApi = apiSlice.injectEndpoints({
 			keepUnusedDataFor: 60 * 60 * 1000, // 1 hour
 			providesTags: ["Profile"],
 		}),
+		setProfilePicture: builder.mutation<void, FormData>({
+			query: (formdata) => ({
+				url: "user/setProfilePic",
+				method: "POST",
+				body: formdata,
+			}),
+			invalidatesTags: ["Profile"],
+		}),
 		updateName: builder.mutation<void, { name: string }>({
-			query: (name) => ({
+			query: ({ name }) => ({
 				url: "user/updateName",
 				method: "POST",
 				body: { name },
@@ -68,7 +77,7 @@ export const authApi = apiSlice.injectEndpoints({
 			invalidatesTags: ["Profile"],
 		}),
 		changeEmail: builder.mutation<void, { email: string }>({
-			query: (email) => ({
+			query: ({ email }) => ({
 				url: "user/changeEmail",
 				method: "POST",
 				body: { email },
@@ -103,6 +112,7 @@ export const {
 	useRegisterMutation,
 	useLoginMutation,
 	useGetProfileQuery,
+	useSetProfilePictureMutation,
 	useUpdateNameMutation,
 	useChangeEmailMutation,
 	useChangePasswordMutation,
