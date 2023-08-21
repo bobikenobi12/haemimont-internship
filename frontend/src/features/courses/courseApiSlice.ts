@@ -19,6 +19,7 @@ export interface Course {
 	teacher: Teacher;
 	picturePath: string;
 	studentCount: number;
+	enrolled?: boolean;
 }
 
 export interface CreateCourseRequest {
@@ -75,9 +76,9 @@ export const courseApi = apiSlice.injectEndpoints({
 			CourseResponse<Course>,
 			PaginationRequest
 		>({
-			query: ({ page = 1, pageSize = 10 }) => ({
+			query: ({ page = 1, pageSize = 10, completed }) => ({
 				url: "courses/completed",
-				params: { page, pageSize },
+				params: { page, pageSize, completed },
 			}),
 			providesTags: ["Course"],
 		}),
