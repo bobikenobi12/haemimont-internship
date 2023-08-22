@@ -8,6 +8,10 @@ export interface CourseState {
 		courses: Course[];
 		size: number;
 	};
+	searchedCourses: {
+		courses: Course[];
+		size: number;
+	};
 	enrolledCourses: {
 		courses: Course[];
 		size: number;
@@ -23,6 +27,19 @@ export interface CourseState {
 	teacherCourses: {
 		courses: Course[];
 		size: number;
+	};
+	coursePageFilters: {
+		type:
+			| "ALL"
+			| "ENROLLED"
+			| "COMPLETED"
+			| "UNCOMPLETED"
+			| "TEACHER"
+			| "SEARCH";
+		page: number;
+		pageSize: number;
+		completed?: boolean;
+		name?: string;
 	};
 }
 
@@ -31,6 +48,10 @@ const initialState: CourseState = {
 		size: 0,
 		courses: [],
 	},
+	searchedCourses: {
+		size: 0,
+		courses: [],
+	},
 	enrolledCourses: {
 		size: 0,
 		courses: [],
@@ -47,12 +68,23 @@ const initialState: CourseState = {
 		size: 0,
 		courses: [],
 	},
+	coursePageFilters: {
+		type: "UNCOMPLETED",
+		page: 1,
+		pageSize: 10,
+	},
 };
 
 export const courseSlice = createSlice({
 	name: "course",
 	initialState,
-	reducers: {},
+	reducers: {
+		setCoursePageFilters: (state, action) => {
+			state.coursePageFilters = {
+				...action.payload,
+			};
+		},
+	},
 	extraReducers: (builder) => {
 		builder.addMatcher(
 			courseApi.endpoints.getAllCourses.matchFulfilled,
@@ -63,7 +95,9 @@ export const courseSlice = createSlice({
 		builder.addMatcher(
 			courseApi.endpoints.getUncompletedCourses.matchFulfilled,
 			(state, action) => {
-				state.uncompletedCourses = action.payload;
+				state.uncompletedCourses = {
+					...action.payload,
+				};
 			}
 		);
 		builder.addMatcher(
@@ -82,10 +116,22 @@ export const courseSlice = createSlice({
 				state.teacherCourses = action.payload;
 			}
 		);
+		builder.addMatcher(
+			courseApi.endpoints.findCoursesByName.matchFulfilled,
+			(state, action) => {
+				state.searchedCourses = {
+					...action.payload,
+				};
+			}
+		);
 	},
 });
 
+export const { setCoursePageFilters } = courseSlice.actions;
+
 export const selectCourses = (state: RootState) => state.course.courses;
+export const selectSearchedCourses = (state: RootState) =>
+	state.course.searchedCourses;
 export const selectEnrolledCourses = (state: RootState) =>
 	state.course.enrolledCourses;
 export const selectCompletedCourses = (state: RootState) =>
@@ -94,5 +140,7 @@ export const selectUncompletedCourses = (state: RootState) =>
 	state.course.uncompletedCourses;
 export const selectTeacherCourses = (state: RootState) =>
 	state.course.teacherCourses;
+export const selectCoursePageFilters = (state: RootState) =>
+	state.course.coursePageFilters;
 
 export default courseSlice.reducer;
