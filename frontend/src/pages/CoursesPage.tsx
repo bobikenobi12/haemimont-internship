@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 import { Flex, Box, Button, Select, Text } from "@chakra-ui/react";
 
@@ -12,6 +12,10 @@ import Course from "../components/Course";
 export default function CoursesPage() {
 	const [page, setPage] = useState(1);
 	const [perPage, setPerPage] = useState(10);
+
+	useEffect(() => {
+		setPage(1);
+	}, [perPage]);
 
 	useGetProfileQuery();
 

@@ -4,6 +4,7 @@ import { Role } from "../auth/authApiSlice";
 export interface Teacher {
 	name: string;
 	user: {
+		id: number;
 		email: string;
 		role: Role;
 		timeCreated: Date;
@@ -19,7 +20,12 @@ export interface Course {
 	teacher: Teacher;
 	picturePath: string;
 	studentCount: number;
-	enrolled?: boolean;
+}
+
+export enum CourseStatus {
+	COMPLETED = "COMPLETED",
+	CAN_COMPLETE = "CAN_COMPLETE",
+	CAN_ENROLL = "CAN_ENROLL",
 }
 
 export interface CreateCourseRequest {
@@ -29,6 +35,11 @@ export interface CreateCourseRequest {
 	duration: number;
 }
 
+export interface EditCourseRequest {
+	courseId: number;
+	courseName: string;
+	description: string;
+}
 export interface PaginationRequest {
 	page: number;
 	pageSize: number;
@@ -48,6 +59,7 @@ export const courseApi = apiSlice.injectEndpoints({
 				method: "POST",
 				body: { courseName, description, credit, duration },
 			}),
+			invalidatesTags: ["Course"],
 		}),
 		setPicture: builder.mutation<
 			void,
@@ -58,12 +70,14 @@ export const courseApi = apiSlice.injectEndpoints({
 				method: "POST",
 				body: formdata,
 			}),
+			invalidatesTags: ["Course"],
 		}),
 		joinCourse: builder.mutation<void, { courseId: number }>({
 			query: ({ courseId }) => ({
 				url: `courses/sign/${courseId}`,
 				method: "POST",
 			}),
+			invalidatesTags: ["Course", "Profile"],
 		}),
 		completeCourse: builder.mutation<void, { courseId: number }>({
 			query: ({ courseId }) => ({
@@ -111,17 +125,23 @@ export const courseApi = apiSlice.injectEndpoints({
 			}),
 			providesTags: ["Course"],
 		}),
-		getCourseById: builder.query<Course, { courseId: number }>({
+		getCourseById: builder.query<
+			{
+				course: Course;
+				stateEnum?: CourseStatus;
+			},
+			{ courseId: number }
+		>({
 			query: ({ courseId }) => ({
 				url: `courses/findCourseById/${courseId}`,
 			}),
 			providesTags: ["Course"],
 		}),
-		editCourse: builder.mutation<void, { courseId: number }>({
-			query: ({ courseId }) => ({
+		editCourse: builder.mutation<void, EditCourseRequest>({
+			query: ({ courseId, courseName, description }) => ({
 				url: `courses/edit`,
 				method: "POST",
-				body: { courseId },
+				body: { courseId, courseName, description },
 			}),
 			invalidatesTags: ["Course"],
 		}),
