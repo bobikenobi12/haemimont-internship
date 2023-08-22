@@ -35,6 +35,7 @@ import { HamburgerIcon, CloseIcon } from "@chakra-ui/icons";
 import SignOutDialog from "./SignOutDialog";
 import ThemeToggle from "./ThemeToggle";
 import CreateCourseModal from "./CreateCourseModal";
+import SearchCourses from "./SearchCourses";
 interface Props {
 	children: React.ReactNode;
 	href: string;
@@ -123,6 +124,7 @@ export default function NavBar() {
 						justifyContent={"center"}
 						gap={4}
 					>
+						<SearchCourses />
 						<ThemeToggle />
 						{token && role === "TEACHER" && <CreateCourseModal />}
 						{!token && (

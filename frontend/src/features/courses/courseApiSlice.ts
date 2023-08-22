@@ -44,6 +44,7 @@ export interface PaginationRequest {
 	page: number;
 	pageSize: number;
 	completed?: boolean;
+	name?: string;
 }
 
 export interface CourseResponse<T> {
@@ -105,6 +106,17 @@ export const courseApi = apiSlice.injectEndpoints({
 				providesTags: ["Course"],
 			}
 		),
+		findCoursesByName: builder.query<
+			CourseResponse<Course>,
+			PaginationRequest
+		>({
+			query: ({ page = 1, pageSize = 10, name }) => ({
+				url: "courses/findAllByName",
+				params: { page, pageSize, name },
+			}),
+			keepUnusedDataFor: 0,
+			providesTags: ["Course"],
+		}),
 		getUncompletedCourses: builder.query<
 			CourseResponse<Course>,
 			PaginationRequest
@@ -113,6 +125,7 @@ export const courseApi = apiSlice.injectEndpoints({
 				url: "courses/uncompleted",
 				params: { page, pageSize },
 			}),
+			keepUnusedDataFor: 0,
 			providesTags: ["Course"],
 		}),
 		getTeacherCourses: builder.query<
@@ -156,6 +169,7 @@ export const {
 	useGetCompletedCoursesQuery,
 	useGetUncompletedCoursesQuery,
 	useGetAllCoursesQuery,
+	useLazyFindCoursesByNameQuery,
 	useGetTeacherCoursesQuery,
 	useGetCourseByIdQuery,
 	useEditCourseMutation,
