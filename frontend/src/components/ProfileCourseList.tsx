@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 import {
 	Flex,
@@ -38,6 +38,10 @@ export default function ProfileCourseList({
 
 	const [page, setPage] = useState(1);
 	const [perPage, setPerPage] = useState(10);
+
+	useEffect(() => {
+		setPage(1);
+	}, [perPage]);
 
 	const { data: completedCourses, isLoading: isLoadingCompletedCourses } =
 		useGetCompletedCoursesQuery(
