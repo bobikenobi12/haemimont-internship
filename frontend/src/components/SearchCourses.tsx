@@ -1,13 +1,15 @@
 import {
 	FormControl,
-	FormLabel,
 	FormErrorMessage,
+	InputLeftElement,
 	InputGroup,
 	Input,
 	Button,
 	useToast,
 } from "@chakra-ui/react";
+import { Search2Icon } from "@chakra-ui/icons";
 
+import { useNavigate, useLocation } from "react-router-dom";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, SubmitHandler } from "react-hook-form";
@@ -26,6 +28,9 @@ type FormValues = z.infer<typeof schema>;
 export default function SearchCourses() {
 	const toast = useToast();
 	const dispatch = useAppDispatch();
+
+	const navigate = useNavigate();
+	const location = useLocation();
 
 	const {
 		register,
@@ -61,6 +66,10 @@ export default function SearchCourses() {
 					pageSize: 10,
 				})
 			);
+
+			if (location.pathname !== "/courses") {
+				navigate("/courses");
+			}
 		} catch (err) {
 			toast({
 				title: "Error",
@@ -75,18 +84,35 @@ export default function SearchCourses() {
 	return (
 		<form onSubmit={handleSubmit(onSubmit)}>
 			<FormControl isInvalid={!!errors.name}>
-				<FormLabel htmlFor="name">Name</FormLabel>
 				<InputGroup>
+					<InputLeftElement
+						children={<Search2Icon color="gray.600" />}
+					/>
 					<Input
 						id="name"
 						placeholder="Course name"
 						{...register("name")}
+						onChange={(e) => {
+							if (e.target.value === "") {
+								dispatch(
+									setCoursePageFilters({
+										type: "UNCOMPLETED",
+										page: 1,
+										pageSize: 10,
+									})
+								);
+								if (location.pathname !== "/courses") {
+									navigate("/courses");
+								}
+							}
+						}}
 					/>
 					<Button
 						type="submit"
 						ml={2}
 						isLoading={isLoading}
 						isDisabled={isSubmitting}
+						display={{ base: "none", md: "block" }}
 					>
 						Search
 					</Button>

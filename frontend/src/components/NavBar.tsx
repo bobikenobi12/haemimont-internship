@@ -124,7 +124,9 @@ export default function NavBar() {
 						justifyContent={"center"}
 						gap={4}
 					>
-						<SearchCourses />
+						<Box display={{ base: "none", md: "block" }}>
+							<SearchCourses />
+						</Box>
 						<ThemeToggle />
 						{token && role === "TEACHER" && <CreateCourseModal />}
 						{!token && (
@@ -219,6 +221,7 @@ export default function NavBar() {
 									{name}
 								</NavLink>
 							))}
+							<SearchCourses />
 						</Stack>
 					</Box>
 				) : null}

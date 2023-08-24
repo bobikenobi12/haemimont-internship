@@ -34,7 +34,6 @@ export default function CoursesPage() {
 
 	useGetProfileQuery();
 
-	console.log(coursePageFilters.page);
 	const { error, isLoading, isFetching } = useGetUncompletedCoursesQuery(
 		{
 			page: coursePageFilters.page,
@@ -61,13 +60,7 @@ export default function CoursesPage() {
 			<Box textAlign={"center"} mb={4}>
 				<Text fontSize={"2xl"}>Results: {data.size}</Text>
 			</Box>
-			<Flex
-				wrap={"wrap"}
-				justify={"center"}
-				align={"center"}
-				overflowY={"scroll"}
-				gap={4}
-			>
+			<Flex wrap={"wrap"} justify={"center"} align={"center"} gap={4}>
 				{data.courses.map(
 					({
 						courseId,
@@ -77,7 +70,8 @@ export default function CoursesPage() {
 						duration,
 						teacher,
 						picturePath,
-						studentCount,
+						studentsCount,
+						time_created,
 					}: CourseProps) => (
 						<Course
 							key={courseId}
@@ -88,7 +82,8 @@ export default function CoursesPage() {
 							duration={duration}
 							teacher={teacher}
 							picturePath={picturePath}
-							studentCount={studentCount}
+							studentsCount={studentsCount}
+							time_created={time_created}
 						/>
 					)
 				)}
