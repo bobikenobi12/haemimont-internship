@@ -1,6 +1,17 @@
 import { useEffect } from "react";
 
-import { Flex, Box, Button, Select, Text } from "@chakra-ui/react";
+import {
+	Flex,
+	Box,
+	Button,
+	Select,
+	Text,
+	Badge,
+	VStack,
+} from "@chakra-ui/react";
+
+import { CloseIcon } from "@chakra-ui/icons";
+import { motion } from "framer-motion";
 
 import { useGetProfileQuery } from "../features/auth/authApiSlice";
 import {
@@ -8,6 +19,7 @@ import {
 	useGetAllCoursesQuery,
 	useGetCompletedCoursesQuery,
 	useGetTeacherCoursesQuery,
+	useFindCoursesByNameQuery,
 } from "../features/courses/courseApiSlice";
 
 import { useAppSelector, useAppDispatch } from "../app/hooks";
@@ -113,14 +125,36 @@ export default function CoursesPage() {
 		}
 	);
 
+	const {
+		error: errorSearch,
+		isLoading: isLoadingSearch,
+		isFetching: isFetchingSearch,
+	} = useFindCoursesByNameQuery(
+		{
+			name: coursePageFilters.name,
+			page: coursePageFilters.page,
+			pageSize: coursePageFilters.pageSize,
+		},
+		{
+			skip: coursePageFilters.type !== "SEARCH",
+		}
+	);
+
 	if (
 		isLoadingAll ||
 		isLoadingUncompleted ||
 		isLoadingCompleted ||
-		isLoadingTeacher
+		isLoadingTeacher ||
+		isLoadingSearch
 	)
 		return <div>Loading...</div>;
-	if (errorAll || errorUncompleted || errorCompleted || errorTeacher)
+	if (
+		errorAll ||
+		errorUncompleted ||
+		errorCompleted ||
+		errorTeacher ||
+		errorSearch
+	)
 		return <div>Something went wrong</div>;
 
 	const data =
@@ -143,7 +177,8 @@ export default function CoursesPage() {
 			{isFetchingAll ||
 				((isFetchingUncompleted ||
 					isFetchingCompleted ||
-					isFetchingTeacher) && <div>Fetching...</div>)}{" "}
+					isFetchingTeacher ||
+					isFetchingSearch) && <div>Fetching...</div>)}{" "}
 			<Box>
 				<Flex
 					justify={"center"}
@@ -152,19 +187,45 @@ export default function CoursesPage() {
 					gap={4}
 					direction={{ base: "column", md: "row" }}
 				>
-					<Box mr={4}>
-						{coursePageFilters.type ===
-						CoursePageFiltersTypeEnum.SEARCH ? (
-							<Text fontSize={"xl"}>
-								Search results for: {coursePageFilters.name}
-							</Text>
-						) : (
-							<Text fontSize={"xl"}>
-								Showing {data.courses.length} of {data.size}{" "}
-								courses
-							</Text>
+					<VStack mr={4}>
+						<Text fontSize={"xl"}>
+							{data.size} results{" "}
+							{coursePageFilters.type === "SEARCH" &&
+								`for "${coursePageFilters.name}"`}
+						</Text>
+						{coursePageFilters.type === "SEARCH" && (
+							<Badge
+								colorScheme="purple"
+								alignItems={"center"}
+								borderRadius={"full"}
+								px={2}
+								py={1}
+								display={"flex"}
+								gap={1}
+								as={motion.div}
+								whileHover={{
+									scale: 1.05,
+									transition: { duration: 0.3 },
+								}}
+							>
+								<CloseIcon
+									mr={1}
+									cursor={"pointer"}
+									onClick={() => {
+										dispatch(
+											setCoursePageFilters({
+												...coursePageFilters,
+												page: 1,
+												type: "ALL",
+												name: "",
+											})
+										);
+									}}
+								/>
+								{coursePageFilters.name}
+							</Badge>
 						)}
-					</Box>
+					</VStack>
 
 					<Select
 						maxW={"200px"}
