@@ -27,13 +27,22 @@ export interface Tab extends CreateTabRequest {
 
 export const tabsApi = apiSlice.injectEndpoints({
 	endpoints: (builder) => ({
+		getTabById: builder.query<Tab, { tabId: number; courseId: number }>({
+			query: ({ tabId, courseId }) => `tabs/get/${courseId}/${tabId}`,
+			providesTags: (arg: any) => [
+				{ type: "Tab", id: arg.tabId },
+				{ type: "Tab", id: arg.courseId },
+			],
+		}),
 		createTab: builder.mutation<void, CreateTabRequest>({
 			query: ({ tabName, contentType, content, course }) => ({
 				url: "tabs/create",
 				method: "POST",
 				body: { tabName, contentType, content, course },
 			}),
-			invalidatesTags: ["Tab"],
+			invalidatesTags: (arg: any) => [
+				{ type: "Tab", id: arg.course.courseId },
+			],
 		}),
 		editTab: builder.mutation<void, UpdateTabRequest>({
 			query: ({ tabId, tabName, contentType, content, course }) => ({
@@ -41,7 +50,9 @@ export const tabsApi = apiSlice.injectEndpoints({
 				method: "POST",
 				body: { tabName, contentType, content, course },
 			}),
-			invalidatesTags: ["Tab"],
+			invalidatesTags: (arg: any) => [
+				{ type: "Tab", id: arg.course.courseId },
+			],
 		}),
 		completeTab: builder.mutation<
 			void,
@@ -51,7 +62,10 @@ export const tabsApi = apiSlice.injectEndpoints({
 				url: `tabs/complete/${courseId}/${tabId}`,
 				method: "POST",
 			}),
-			invalidatesTags: ["Tab"],
+			invalidatesTags: (arg: any) => [
+				{ type: "Tab", id: arg.courseId },
+				{ type: "Tab", id: arg.tabId },
+			],
 		}),
 	}),
 });
