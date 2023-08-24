@@ -1,6 +1,5 @@
 import {
 	FormControl,
-	FormErrorMessage,
 	InputLeftElement,
 	InputGroup,
 	Input,
@@ -20,7 +19,7 @@ import { useAppDispatch } from "../app/hooks";
 import { setCoursePageFilters } from "../features/courses/courseSlice";
 
 const schema = z.object({
-	name: z.string().nonempty(),
+	name: z.string(),
 });
 
 type FormValues = z.infer<typeof schema>;
@@ -61,9 +60,10 @@ export default function SearchCourses() {
 			});
 			dispatch(
 				setCoursePageFilters({
-					type: "SEARCHED",
+					type: "SEARCH",
 					page: 1,
 					pageSize: 10,
+					name: data.name,
 				})
 			);
 
@@ -92,20 +92,22 @@ export default function SearchCourses() {
 						id="name"
 						placeholder="Course name"
 						{...register("name")}
-						onChange={(e) => {
-							if (e.target.value === "") {
-								dispatch(
-									setCoursePageFilters({
-										type: "UNCOMPLETED",
-										page: 1,
-										pageSize: 10,
-									})
-								);
-								if (location.pathname !== "/courses") {
-									navigate("/courses");
-								}
-							}
-						}}
+						// onChange={(e) => {
+						// 	if (e.target.value === "") {
+						// 		console.log(e.target.value);
+
+						// 		dispatch(
+						// 			setCoursePageFilters({
+						// 				type: "UNCOMPLETED",
+						// 				page: 1,
+						// 				pageSize: 10,
+						// 			})
+						// 		);
+						// 		if (location.pathname !== "/courses") {
+						// 			navigate("/courses");
+						// 		}
+						// 	}
+						// }}
 					/>
 					<Button
 						type="submit"
@@ -117,9 +119,6 @@ export default function SearchCourses() {
 						Search
 					</Button>
 				</InputGroup>
-				<FormErrorMessage>
-					{errors.name && errors.name.message}
-				</FormErrorMessage>
 			</FormControl>
 		</form>
 	);
