@@ -1,16 +1,34 @@
 import { useEffect } from "react";
 
-import { Flex, Box, Button, Select, Text } from "@chakra-ui/react";
+import {
+	Flex,
+	Box,
+	Button,
+	Select,
+	Text,
+	Badge,
+	HStack,
+} from "@chakra-ui/react";
 
 import { useGetProfileQuery } from "../features/auth/authApiSlice";
-import { useGetUncompletedCoursesQuery } from "../features/courses/courseApiSlice";
+import {
+	useGetUncompletedCoursesQuery,
+	useGetAllCoursesQuery,
+	useGetCompletedCoursesQuery,
+	useGetTeacherCoursesQuery,
+} from "../features/courses/courseApiSlice";
 
 import { useAppSelector, useAppDispatch } from "../app/hooks";
 import {
 	selectCoursePageFilters,
+	selectAllCourses,
 	selectUncompletedCourses,
+	selectCompletedCourses,
+	selectEnrolledCourses,
+	selectTeacherCourses,
 	selectSearchedCourses,
 	setCoursePageFilters,
+	CoursePageFiltersTypeEnum,
 } from "../features/courses/courseSlice";
 
 import type { Course as CourseProps } from "../features/courses/courseApiSlice";
@@ -21,6 +39,10 @@ export default function CoursesPage() {
 	const dispatch = useAppDispatch();
 
 	const coursePageFilters = useAppSelector(selectCoursePageFilters);
+	const allCourses = useAppSelector(selectAllCourses);
+	const completedCourses = useAppSelector(selectCompletedCourses);
+	const enrolledCourses = useAppSelector(selectEnrolledCourses);
+	const teacherCourses = useAppSelector(selectTeacherCourses);
 	const uncompletedCourses = useAppSelector(selectUncompletedCourses);
 	const searchedCourses = useAppSelector(selectSearchedCourses);
 
@@ -34,7 +56,25 @@ export default function CoursesPage() {
 
 	useGetProfileQuery();
 
-	const { error, isLoading, isFetching } = useGetUncompletedCoursesQuery(
+	const {
+		error: errorAll,
+		isLoading: isLoadingAll,
+		isFetching: isFetchingAll,
+	} = useGetAllCoursesQuery(
+		{
+			page: coursePageFilters.page,
+			pageSize: coursePageFilters.pageSize,
+		},
+		{
+			skip: coursePageFilters.type !== "ALL",
+		}
+	);
+
+	const {
+		error: errorUncompleted,
+		isLoading: isLoadingUncompleted,
+		isFetching: isFetchingUncompleted,
+	} = useGetUncompletedCoursesQuery(
 		{
 			page: coursePageFilters.page,
 			pageSize: coursePageFilters.pageSize,
@@ -44,21 +84,103 @@ export default function CoursesPage() {
 		}
 	);
 
-	if (isLoading) return <div>Loading...</div>;
-	if (error) return <div>Error</div>;
+	const {
+		error: errorCompleted,
+		isLoading: isLoadingCompleted,
+		isFetching: isFetchingCompleted,
+	} = useGetCompletedCoursesQuery(
+		{
+			page: coursePageFilters.page,
+			pageSize: coursePageFilters.pageSize,
+			completed: coursePageFilters.completed,
+		},
+		{
+			skip:
+				coursePageFilters.type !== "COMPLETED" ||
+				coursePageFilters.type !==
+					("ENROLLED" as CoursePageFiltersTypeEnum),
+		}
+	);
+
+	const {
+		error: errorTeacher,
+		isLoading: isLoadingTeacher,
+		isFetching: isFetchingTeacher,
+	} = useGetTeacherCoursesQuery(
+		{
+			page: coursePageFilters.page,
+			pageSize: coursePageFilters.pageSize,
+		},
+		{
+			skip: coursePageFilters.type !== "TEACHER",
+		}
+	);
+
+	if (
+		isLoadingAll ||
+		isLoadingUncompleted ||
+		isLoadingCompleted ||
+		isLoadingTeacher
+	)
+		return <div>Loading...</div>;
+	if (errorAll || errorUncompleted || errorCompleted || errorTeacher)
+		return <div>Something went wrong</div>;
 
 	const data =
 		coursePageFilters.type === "UNCOMPLETED"
 			? uncompletedCourses
+			: coursePageFilters.type === "ALL"
+			? allCourses
+			: coursePageFilters.type === "COMPLETED"
+			? completedCourses
+			: coursePageFilters.type === "ENROLLED"
+			? enrolledCourses
 			: searchedCourses;
 
 	if (!data) return <div>Something went wrong</div>;
 
 	return (
 		<>
-			{isFetching && <div>Updating...</div>}
+			{isFetchingAll ||
+				((isFetchingUncompleted ||
+					isFetchingCompleted ||
+					isFetchingTeacher) && <div>Fetching...</div>)}
+
+			<HStack justify={"center"} align={"center"} mb={4}>
+				{coursePageFilters.type === "UNCOMPLETED" ? (
+					<Badge colorScheme="green">Uncompleted Courses</Badge>
+				) : coursePageFilters.type === "ALL" ? (
+					<Badge colorScheme="purple">All Courses</Badge>
+				) : coursePageFilters.type === "COMPLETED" ? (
+					<Badge colorScheme="green">Completed Courses</Badge>
+				) : coursePageFilters.type === "ENROLLED" ? (
+					<Badge colorScheme="green">Enrolled Courses</Badge>
+				) : (
+					<Badge colorScheme="purple">Searched Courses</Badge>
+				)}
+			</HStack>
 			<Box textAlign={"center"} mb={4}>
-				<Text fontSize={"2xl"}>Results: {data.size}</Text>
+				{coursePageFilters.type === "UNCOMPLETED" ? (
+					<Text fontSize={"2xl"} fontWeight={"bold"}>
+						{data.size} results for uncompleted courses
+					</Text>
+				) : coursePageFilters.type === "ALL" ? (
+					<Text fontSize={"2xl"} fontWeight={"bold"}>
+						{data.size} results for all courses
+					</Text>
+				) : coursePageFilters.type === "COMPLETED" ? (
+					<Text fontSize={"2xl"} fontWeight={"bold"}>
+						{data.size} results for completed courses
+					</Text>
+				) : coursePageFilters.type === "ENROLLED" ? (
+					<Text fontSize={"2xl"} fontWeight={"bold"}>
+						{data.size} results for enrolled courses
+					</Text>
+				) : (
+					<Text fontSize={"2xl"} fontWeight={"bold"}>
+						{data.size} result for "{coursePageFilters.name}"
+					</Text>
+				)}
 			</Box>
 			<Flex wrap={"wrap"} justify={"center"} align={"center"} gap={4}>
 				{data.courses.map(

@@ -35,6 +35,7 @@ import { useGetProfileQuery } from "../features/auth/authApiSlice";
 
 import ProfilePictureModal from "../components/ProfilePictureModal";
 import ProfileCourseList from "../components/ProfileCourseList";
+import { FormatDate } from "../utils/FormatDate";
 
 export default function UserProfilePage() {
 	const role = useAppSelector(selectRole);
@@ -123,7 +124,8 @@ export default function UserProfilePage() {
 								<Box>
 									{timeCreated ? (
 										<Text fontSize="xl">
-											Time Created: {timeCreated}
+											Time Created:{" "}
+											{FormatDate(timeCreated)}
 										</Text>
 									) : (
 										<Spinner />

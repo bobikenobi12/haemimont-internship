@@ -3,6 +3,14 @@ import { courseApi } from "./courseApiSlice";
 import type { RootState } from "../../app/store";
 import type { Course } from "./courseApiSlice";
 
+export enum CoursePageFiltersTypeEnum {
+	ALL = "ALL",
+	ENROLLED = "ENROLLED",
+	COMPLETED = "COMPLETED",
+	UNCOMPLETED = "UNCOMPLETED",
+	TEACHER = "TEACHER",
+	SEARCH = "SEARCH",
+}
 export interface CourseState {
 	courses: {
 		courses: Course[];
@@ -29,13 +37,7 @@ export interface CourseState {
 		size: number;
 	};
 	coursePageFilters: {
-		type:
-			| "ALL"
-			| "ENROLLED"
-			| "COMPLETED"
-			| "UNCOMPLETED"
-			| "TEACHER"
-			| "SEARCH";
+		type: CoursePageFiltersTypeEnum;
 		page: number;
 		pageSize: number;
 		completed?: boolean;
@@ -69,7 +71,7 @@ const initialState: CourseState = {
 		courses: [],
 	},
 	coursePageFilters: {
-		type: "UNCOMPLETED",
+		type: CoursePageFiltersTypeEnum.ALL,
 		page: 1,
 		pageSize: 10,
 	},
@@ -129,7 +131,7 @@ export const courseSlice = createSlice({
 
 export const { setCoursePageFilters } = courseSlice.actions;
 
-export const selectCourses = (state: RootState) => state.course.courses;
+export const selectAllCourses = (state: RootState) => state.course.courses;
 export const selectSearchedCourses = (state: RootState) =>
 	state.course.searchedCourses;
 export const selectEnrolledCourses = (state: RootState) =>
