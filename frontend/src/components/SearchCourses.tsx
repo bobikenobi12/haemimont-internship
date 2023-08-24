@@ -60,7 +60,7 @@ export default function SearchCourses() {
 			});
 			dispatch(
 				setCoursePageFilters({
-					type: "SEARCHED",
+					type: "SEARCH",
 					page: 1,
 					pageSize: 10,
 					name: data.name,

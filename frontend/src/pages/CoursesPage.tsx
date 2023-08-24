@@ -1,14 +1,6 @@
 import { useEffect } from "react";
 
-import {
-	Flex,
-	Box,
-	Button,
-	Select,
-	Text,
-	Badge,
-	HStack,
-} from "@chakra-ui/react";
+import { Flex, Box, Button, Select, Text } from "@chakra-ui/react";
 
 import { useGetProfileQuery } from "../features/auth/authApiSlice";
 import {
@@ -19,6 +11,9 @@ import {
 } from "../features/courses/courseApiSlice";
 
 import { useAppSelector, useAppDispatch } from "../app/hooks";
+
+import { selectRole } from "../features/auth/authSlice";
+
 import {
 	selectCoursePageFilters,
 	selectAllCourses,
@@ -37,6 +32,8 @@ import Course from "../components/Course";
 
 export default function CoursesPage() {
 	const dispatch = useAppDispatch();
+
+	const role = useAppSelector(selectRole);
 
 	const coursePageFilters = useAppSelector(selectCoursePageFilters);
 	const allCourses = useAppSelector(selectAllCourses);
@@ -96,9 +93,9 @@ export default function CoursesPage() {
 		},
 		{
 			skip:
-				coursePageFilters.type !== "COMPLETED" ||
-				coursePageFilters.type !==
-					("ENROLLED" as CoursePageFiltersTypeEnum),
+				coursePageFilters.type !== "ENROLLED"
+					? coursePageFilters.type !== "COMPLETED"
+					: false,
 		}
 	);
 
@@ -135,6 +132,8 @@ export default function CoursesPage() {
 			? completedCourses
 			: coursePageFilters.type === "ENROLLED"
 			? enrolledCourses
+			: coursePageFilters.type === "TEACHER"
+			? teacherCourses
 			: searchedCourses;
 
 	if (!data) return <div>Something went wrong</div>;
@@ -144,122 +143,143 @@ export default function CoursesPage() {
 			{isFetchingAll ||
 				((isFetchingUncompleted ||
 					isFetchingCompleted ||
-					isFetchingTeacher) && <div>Fetching...</div>)}
+					isFetchingTeacher) && <div>Fetching...</div>)}{" "}
+			<Box>
+				<Flex
+					justify={"center"}
+					align={"center"}
+					mt={4}
+					gap={4}
+					direction={{ base: "column", md: "row" }}
+				>
+					<Box mr={4}>
+						{coursePageFilters.type ===
+						CoursePageFiltersTypeEnum.SEARCH ? (
+							<Text fontSize={"xl"}>
+								Search results for: {coursePageFilters.name}
+							</Text>
+						) : (
+							<Text fontSize={"xl"}>
+								Showing {data.courses.length} of {data.size}{" "}
+								courses
+							</Text>
+						)}
+					</Box>
 
-			<HStack justify={"center"} align={"center"} mb={4}>
-				{coursePageFilters.type === "UNCOMPLETED" ? (
-					<Badge colorScheme="green">Uncompleted Courses</Badge>
-				) : coursePageFilters.type === "ALL" ? (
-					<Badge colorScheme="purple">All Courses</Badge>
-				) : coursePageFilters.type === "COMPLETED" ? (
-					<Badge colorScheme="green">Completed Courses</Badge>
-				) : coursePageFilters.type === "ENROLLED" ? (
-					<Badge colorScheme="green">Enrolled Courses</Badge>
-				) : (
-					<Badge colorScheme="purple">Searched Courses</Badge>
-				)}
-			</HStack>
-			<Box textAlign={"center"} mb={4}>
-				{coursePageFilters.type === "UNCOMPLETED" ? (
-					<Text fontSize={"2xl"} fontWeight={"bold"}>
-						{data.size} results for uncompleted courses
-					</Text>
-				) : coursePageFilters.type === "ALL" ? (
-					<Text fontSize={"2xl"} fontWeight={"bold"}>
-						{data.size} results for all courses
-					</Text>
-				) : coursePageFilters.type === "COMPLETED" ? (
-					<Text fontSize={"2xl"} fontWeight={"bold"}>
-						{data.size} results for completed courses
-					</Text>
-				) : coursePageFilters.type === "ENROLLED" ? (
-					<Text fontSize={"2xl"} fontWeight={"bold"}>
-						{data.size} results for enrolled courses
-					</Text>
-				) : (
-					<Text fontSize={"2xl"} fontWeight={"bold"}>
-						{data.size} result for "{coursePageFilters.name}"
-					</Text>
-				)}
-			</Box>
-			<Flex wrap={"wrap"} justify={"center"} align={"center"} gap={4}>
-				{data.courses.map(
-					({
-						courseId,
-						courseName,
-						description,
-						credit,
-						duration,
-						teacher,
-						picturePath,
-						studentsCount,
-						time_created,
-					}: CourseProps) => (
-						<Course
-							key={courseId}
-							courseId={courseId}
-							courseName={courseName}
-							description={description}
-							credit={credit}
-							duration={duration}
-							teacher={teacher}
-							picturePath={picturePath}
-							studentsCount={studentsCount}
-							time_created={time_created}
-						/>
-					)
-				)}
-			</Flex>
-
-			<Flex justify={"center"} align={"center"} mt={4}>
-				<Box mr={4}>
 					<Select
-						value={coursePageFilters.pageSize}
+						maxW={"200px"}
+						mr={4}
+						value={coursePageFilters.type}
 						onChange={(e) => {
 							dispatch(
 								setCoursePageFilters({
 									...coursePageFilters,
 									page: 1,
-									pageSize: Number(e.target.value),
+									type: e.target
+										.value as CoursePageFiltersTypeEnum,
+									completed:
+										e.target.value === "COMPLETED"
+											? true
+											: e.target.value === "ENROLLED"
+											? false
+											: undefined,
 								})
 							);
 						}}
 					>
-						<option value={10}>10</option>
-						<option value={20}>20</option>
-						<option value={50}>50</option>
+						<option value={"ALL"}>All</option>
+						{role === "STUDENT" && (
+							<>
+								<option value={"UNCOMPLETED"}>
+									Uncompleted
+								</option>
+								<option value={"COMPLETED"}>Completed</option>
+								<option value={"ENROLLED"}>Enrolled</option>
+							</>
+						)}
+						{role === "TEACHER" && (
+							<option value={"TEACHER"}>Teacher</option>
+						)}
 					</Select>
-				</Box>
-				<Button
-					onClick={() =>
-						dispatch(
-							setCoursePageFilters({
-								...coursePageFilters,
-								page: coursePageFilters.page - 1,
-							})
+				</Flex>
+				<Flex wrap={"wrap"} justify={"center"} align={"center"} gap={4}>
+					{data.courses.map(
+						({
+							courseId,
+							courseName,
+							description,
+							credit,
+							duration,
+							teacher,
+							picturePath,
+							studentsCount,
+							time_created,
+						}: CourseProps) => (
+							<Course
+								key={courseId}
+								courseId={courseId}
+								courseName={courseName}
+								description={description}
+								credit={credit}
+								duration={duration}
+								teacher={teacher}
+								picturePath={picturePath}
+								studentsCount={studentsCount}
+								time_created={time_created}
+							/>
 						)
-					}
-					isDisabled={coursePageFilters.page === 1}
-				>
-					Prev
-				</Button>
-				<Button
-					onClick={() => {
-						dispatch(
-							setCoursePageFilters({
-								...coursePageFilters,
-								page: coursePageFilters.page + 1,
-							})
-						);
-					}}
-					isDisabled={
-						coursePageFilters.page ===
-						Math.ceil(data.size / coursePageFilters.pageSize)
-					}
-				>
-					Next
-				</Button>
-			</Flex>
+					)}
+				</Flex>
+				<Flex justify={"center"} align={"center"} mt={4}>
+					<Box mr={4}>
+						<Select
+							value={coursePageFilters.pageSize}
+							onChange={(e) => {
+								dispatch(
+									setCoursePageFilters({
+										...coursePageFilters,
+										page: 1,
+										pageSize: Number(e.target.value),
+									})
+								);
+							}}
+						>
+							<option value={10}>10</option>
+							<option value={20}>20</option>
+							<option value={50}>50</option>
+						</Select>
+					</Box>
+					<Button
+						onClick={() =>
+							dispatch(
+								setCoursePageFilters({
+									...coursePageFilters,
+									page: coursePageFilters.page - 1,
+								})
+							)
+						}
+						isDisabled={coursePageFilters.page === 1}
+					>
+						Prev
+					</Button>
+					<Button
+						onClick={() => {
+							dispatch(
+								setCoursePageFilters({
+									...coursePageFilters,
+									page: coursePageFilters.page + 1,
+								})
+							);
+						}}
+						isDisabled={
+							coursePageFilters.page ===
+							Math.ceil(data.size / coursePageFilters.pageSize)
+						}
+					>
+						Next
+					</Button>
+				</Flex>
+			</Box>
 		</>
 	);
 }
