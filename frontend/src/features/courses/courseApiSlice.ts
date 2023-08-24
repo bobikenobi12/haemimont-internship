@@ -92,14 +92,28 @@ export const courseApi = apiSlice.injectEndpoints({
 				url: `courses/sign/${courseId}`,
 				method: "POST",
 			}),
-			invalidatesTags: ["Course", "Profile"],
+			invalidatesTags: (arg: any) => [
+				{
+					type: "Course" as const,
+					id: arg.courseId as number,
+				},
+				"Course",
+				"Profile",
+			],
 		}),
 		completeCourse: builder.mutation<void, { courseId: number }>({
 			query: ({ courseId }) => ({
 				url: `courses/complete/${courseId}`,
 				method: "POST",
 			}),
-			invalidatesTags: ["Course", "Profile"],
+			invalidatesTags: (arg: any) => [
+				{
+					type: "Course" as const,
+					id: arg.courseId as number,
+				},
+				"Course",
+				"Profile",
+			],
 		}),
 		getCompletedCourses: builder.query<
 			CourseResponse<Course>,
@@ -109,7 +123,19 @@ export const courseApi = apiSlice.injectEndpoints({
 				url: "courses/completed",
 				params: { page, pageSize, completed },
 			}),
-			providesTags: ["Course"],
+			providesTags: (result) =>
+				result
+					? [
+							...result.courses.map(
+								({ courseId }) =>
+									({
+										type: "Course" as const,
+										id: courseId,
+									} as const)
+							),
+							"Course",
+					  ]
+					: ["Course"],
 		}),
 		getAllCourses: builder.query<CourseResponse<Course>, PaginationRequest>(
 			{
@@ -117,7 +143,19 @@ export const courseApi = apiSlice.injectEndpoints({
 					url: "courses/findAll",
 					params: { page, pageSize },
 				}),
-				providesTags: ["Course"],
+				providesTags: (result) =>
+					result
+						? [
+								...result.courses.map(
+									({ courseId }) =>
+										({
+											type: "Course" as const,
+											id: courseId,
+										} as const)
+								),
+								"Course",
+						  ]
+						: ["Course"],
 			}
 		),
 		findCoursesByName: builder.query<
@@ -129,7 +167,19 @@ export const courseApi = apiSlice.injectEndpoints({
 				params: { page, pageSize, name },
 			}),
 			keepUnusedDataFor: 0,
-			providesTags: ["Course"],
+			providesTags: (result) =>
+				result
+					? [
+							...result.courses.map(
+								({ courseId }) =>
+									({
+										type: "Course" as const,
+										id: courseId,
+									} as const)
+							),
+							"Course",
+					  ]
+					: ["Course"],
 		}),
 		getUncompletedCourses: builder.query<
 			CourseResponse<Course>,
@@ -140,7 +190,19 @@ export const courseApi = apiSlice.injectEndpoints({
 				params: { page, pageSize },
 			}),
 			keepUnusedDataFor: 0,
-			providesTags: ["Course"],
+			providesTags: (result) =>
+				result
+					? [
+							...result.courses.map(
+								({ courseId }) =>
+									({
+										type: "Course" as const,
+										id: courseId,
+									} as const)
+							),
+							"Course",
+					  ]
+					: ["Course"],
 		}),
 		getTeacherCourses: builder.query<
 			CourseResponse<Course>,
@@ -150,7 +212,19 @@ export const courseApi = apiSlice.injectEndpoints({
 				url: "courses/findMyCourses",
 				params: { page, pageSize },
 			}),
-			providesTags: ["Course"],
+			providesTags: (result) =>
+				result
+					? [
+							...result.courses.map(
+								({ courseId }) =>
+									({
+										type: "Course" as const,
+										id: courseId,
+									} as const)
+							),
+							"Course",
+					  ]
+					: ["Course"],
 		}),
 		getCourseById: builder.query<
 			{
@@ -162,7 +236,13 @@ export const courseApi = apiSlice.injectEndpoints({
 			query: ({ courseId }) => ({
 				url: `courses/findCourseById/${courseId}`,
 			}),
-			providesTags: ["Course"],
+			providesTags: (arg: any) => [
+				{
+					type: "Course" as const,
+					id: arg.courseId as number,
+				},
+				"Course",
+			],
 		}),
 		editCourse: builder.mutation<void, EditCourseRequest>({
 			query: ({ courseId, courseName, description }) => ({
@@ -170,15 +250,13 @@ export const courseApi = apiSlice.injectEndpoints({
 				method: "POST",
 				body: { courseId, courseName, description },
 			}),
-			invalidatesTags: ["Course"],
-		}),
-		createCourseTab: builder.mutation<void, CreateCourseTabRequest>({
-			query: ({ content, contentType, course }) => ({
-				url: `courses/tabs/create`,
-				method: "POST",
-				body: { content, contentType, course },
-			}),
-			invalidatesTags: ["Course"],
+			invalidatesTags: (arg: any) => [
+				{
+					type: "Course" as const,
+					id: arg.courseId as number,
+				},
+				"Course",
+			],
 		}),
 	}),
 });
