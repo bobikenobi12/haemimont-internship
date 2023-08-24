@@ -191,8 +191,8 @@ export const {
 	useGetCompletedCoursesQuery,
 	useGetUncompletedCoursesQuery,
 	useGetAllCoursesQuery,
-	useLazyFindCoursesByNameQuery,
 	useGetTeacherCoursesQuery,
+	useFindCoursesByNameQuery,
 	useGetCourseByIdQuery,
 	useEditCourseMutation,
 } = courseApi;
