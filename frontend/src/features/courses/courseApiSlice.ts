@@ -7,7 +7,8 @@ export interface Teacher {
 		id: number;
 		email: string;
 		role: Role;
-		timeCreated: Date;
+		timeCreated: string;
+		picturePath: string;
 	};
 }
 
@@ -19,7 +20,8 @@ export interface Course {
 	duration: number;
 	teacher: Teacher;
 	picturePath: string;
-	studentCount: number;
+	studentsCount: number;
+	time_created: string;
 }
 
 export enum CourseStatus {
@@ -50,6 +52,18 @@ export interface PaginationRequest {
 export interface CourseResponse<T> {
 	courses: T[];
 	size: number;
+}
+
+export enum ContentType {
+	TEXT = "TEXT",
+	VIDEO = "VIDEO",
+}
+export interface CreateCourseTabRequest {
+	contentType: ContentType;
+	content: string;
+	course: {
+		courseId: number;
+	};
 }
 
 export const courseApi = apiSlice.injectEndpoints({
@@ -155,6 +169,14 @@ export const courseApi = apiSlice.injectEndpoints({
 				url: `courses/edit`,
 				method: "POST",
 				body: { courseId, courseName, description },
+			}),
+			invalidatesTags: ["Course"],
+		}),
+		createCourseTab: builder.mutation<void, CreateCourseTabRequest>({
+			query: ({ content, contentType, course }) => ({
+				url: `courses/tabs/create`,
+				method: "POST",
+				body: { content, contentType, course },
 			}),
 			invalidatesTags: ["Course"],
 		}),
