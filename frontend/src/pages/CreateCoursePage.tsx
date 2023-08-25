@@ -4,7 +4,20 @@ import CreateCourseForm from "../components/CreateCourseForm";
 import { useGetProfileQuery } from "../features/auth/authApiSlice";
 
 export default function CreateCoursePage() {
-	useGetProfileQuery();
+	const { data, isLoading } = useGetProfileQuery();
+
+	if (isLoading) {
+		return <Text>Loading...</Text>;
+	}
+
+	if (!data) {
+		return <Text>Something went wrong</Text>;
+	}
+
+	if (data.role !== "TEACHER") {
+		return <Text>Only teachers can create courses</Text>;
+	}
+
 	return (
 		<>
 			<Flex direction="column" align="center" justify="center" w={"100%"}>

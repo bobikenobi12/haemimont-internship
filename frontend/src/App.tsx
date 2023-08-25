@@ -44,9 +44,10 @@ function App() {
 					{/* Public routes */}
 					<Route path="/courses" element={<CoursesPage />} />
 					<Route path="/courses/:courseId" element={<CoursePage />} />
-					<Route path="/course-sign-up" element={<CoursePage />} />
+
+					{/* Teacher routes */}
 					<Route
-						path="/create-course"
+						path="create-course"
 						element={<CreateCoursePage />}
 					/>
 				</Route>
