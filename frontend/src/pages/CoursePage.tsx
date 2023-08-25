@@ -1,21 +1,18 @@
 import {
 	Box,
-	Stack,
-	IconButton,
 	Card,
 	CardBody,
 	Image,
 	Text,
 	Heading,
 	Button,
-	Center,
 	Flex,
 	useToast,
-	Highlight,
 	HStack,
 	Avatar,
 	Divider,
 } from "@chakra-ui/react";
+import { motion } from "framer-motion";
 
 import { useParams } from "react-router-dom";
 
@@ -82,13 +79,7 @@ export default function CoursePage() {
 					>
 						{course.course.courseName}
 					</Heading>
-					<Box
-						mb="4"
-						display={"flex"}
-						flexDirection={{ base: "column", md: "row" }}
-						gap={4}
-						alignItems={"center"}
-					>
+					<Box mb="4" display={"flex"} gap={4} alignItems={"center"}>
 						{role === "STUDENT" &&
 							course.stateEnum === "CAN_COMPLETE" && (
 								<Button
@@ -243,7 +234,56 @@ export default function CoursePage() {
 					<Text>Learn at your own pace</Text>
 				</Box>
 			</Flex>
-			<Divider display={{ base: "block", md: "none" }} h={2} />
+			<Divider display={{ base: "block", md: "none" }} h={2} my={4} />
+			<Flex direction="column" w="100%" p="4">
+				<Box>
+					<Heading fontSize="xl" fontWeight="bold" p="4">
+						There {course.course.tabs?.length === 1 ? "is" : "are"}{" "}
+						{course.course.tabs === undefined
+							? "no tabs"
+							: course.course.tabs.length === 1
+							? "1 tab"
+							: `${course.course.tabs.length} tabs`}{" "}
+					</Heading>
+					<Text fontSize="lg" p="4">
+						{course.course.description}
+					</Text>
+				</Box>
+				<HStack
+					p={4}
+					spacing={4}
+					flexWrap="wrap"
+					borderRadius="lg"
+					bg="gray.100"
+				>
+					{course.course.tabs === undefined && (
+						<Heading fontSize="lg" p="4">
+							There are no tabs yet
+						</Heading>
+					)}
+					{course.course.tabs?.map((tab) => (
+						<Card
+							key={tab.tab_id}
+							w="100%"
+							as={motion.div}
+							whileHover={{
+								scale: 1.05,
+
+								transition: { duration: 0.3 },
+							}}
+							whileTap={{ scale: 0.95 }}
+							cursor={"pointer"}
+						>
+							<CardBody>
+								<Heading fontSize="xl" fontWeight="bold">
+									{tab.tabName}
+								</Heading>
+								<Text>Module {tab.tab_id}</Text>
+							</CardBody>
+						</Card>
+					))}
+				</HStack>
+			</Flex>
 		</Box>
 	);
 }
