@@ -11,6 +11,7 @@ import {
 	HStack,
 	Avatar,
 	Divider,
+	useColorModeValue,
 } from "@chakra-ui/react";
 import { motion } from "framer-motion";
 
@@ -60,9 +61,10 @@ export default function CoursePage() {
 				direction={["column", "column", "row", "row"]}
 				w="100%"
 				p={4}
-				// justify={["center", "center", "space-between", "space-between"]}
-				// align="center"
-				bg={["white", "white", "gray.100", "gray.100"]}
+				bg={{
+					base: useColorModeValue("white", "gray.800"),
+					md: useColorModeValue("gray.100", "gray.900"),
+				}}
 			>
 				<Box w={["100%", "100%", "50%", "50%"]} p="4">
 					<Image
@@ -196,7 +198,7 @@ export default function CoursePage() {
 				w={{ base: "100%", md: "100%", lg: "80%" }}
 				p={{ base: "4", md: "12" }}
 				borderRadius={{ base: "0", md: "lg" }}
-				bg="white"
+				bg={useColorModeValue("white", "gray.700")}
 				boxShadow={{ base: "none", md: "lg" }}
 				justifyContent={"space-between"}
 				mx={"auto"}
@@ -254,34 +256,35 @@ export default function CoursePage() {
 					spacing={4}
 					flexWrap="wrap"
 					borderRadius="lg"
-					bg="gray.100"
+					bg={useColorModeValue("gray.100", "gray.600")}
 				>
-					{course.course.tabs === undefined && (
+					{course.course.tabs?.length === 0 ? (
 						<Heading fontSize="lg" p="4">
 							There are no tabs yet
 						</Heading>
-					)}
-					{course.course.tabs?.map((tab) => (
-						<Card
-							key={tab.tab_id}
-							w="100%"
-							as={motion.div}
-							whileHover={{
-								scale: 1.05,
+					) : (
+						course.course.tabs?.map((tab) => (
+							<Card
+								key={tab.tab_id}
+								w="100%"
+								as={motion.div}
+								whileHover={{
+									scale: 1.05,
 
-								transition: { duration: 0.3 },
-							}}
-							whileTap={{ scale: 0.95 }}
-							cursor={"pointer"}
-						>
-							<CardBody>
-								<Heading fontSize="xl" fontWeight="bold">
-									{tab.tabName}
-								</Heading>
-								<Text>Module {tab.tab_id}</Text>
-							</CardBody>
-						</Card>
-					))}
+									transition: { duration: 0.3 },
+								}}
+								whileTap={{ scale: 0.95 }}
+								cursor={"pointer"}
+							>
+								<CardBody>
+									<Heading fontSize="xl" fontWeight="bold">
+										{tab.tabName}
+									</Heading>
+									<Text>Module {tab.tab_id}</Text>
+								</CardBody>
+							</Card>
+						))
+					)}
 				</HStack>
 			</Flex>
 		</Box>
