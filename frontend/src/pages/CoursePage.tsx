@@ -81,6 +81,7 @@ export default function CoursePage() {
 					>
 						{course.course.courseName}
 					</Heading>
+
 					<Box mb="4" display={"flex"} gap={4} alignItems={"center"}>
 						{role === "STUDENT" &&
 							course.stateEnum === "CAN_COMPLETE" && (
@@ -165,6 +166,7 @@ export default function CoursePage() {
 							{course.course.credit} credits
 						</Text>
 					</Box>
+
 					<Text>
 						{course.course.studentsCount.toLocaleString()} enrolled
 						students
@@ -179,7 +181,9 @@ export default function CoursePage() {
 					>
 						About the course
 					</Heading>
-					<Text>{course.course.description}</Text>
+					<Text fontSize="lg" mb="4">
+						{course.course.description}
+					</Text>
 					<Divider my="4" />
 					<HStack>
 						<Avatar
@@ -240,12 +244,7 @@ export default function CoursePage() {
 			<Flex direction="column" w="100%" p="4">
 				<Box>
 					<Heading fontSize="xl" fontWeight="bold" p="4">
-						There {course.course.tabs?.length === 1 ? "is" : "are"}{" "}
-						{course.course.tabs === undefined
-							? "no tabs"
-							: course.course.tabs.length === 1
-							? "1 tab"
-							: `${course.course.tabs.length} tabs`}{" "}
+						What you'll learn in this course
 					</Heading>
 					<Text fontSize="lg" p="4">
 						{course.course.description}
@@ -258,7 +257,8 @@ export default function CoursePage() {
 					borderRadius="lg"
 					bg={useColorModeValue("gray.100", "gray.600")}
 				>
-					{course.course.tabs?.length === 0 ? (
+					{course.course.tabs === null ||
+					course.course.tabs?.length === 0 ? (
 						<Heading fontSize="lg" p="4">
 							There are no tabs yet
 						</Heading>

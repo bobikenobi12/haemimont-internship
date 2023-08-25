@@ -5,22 +5,13 @@ export enum TabContentType {
 	TEXT = "TEXT",
 	VIDEO = "VIDEO",
 }
-
-export interface CreateTabRequest {
+export interface Tab {
+	tab_id: number;
 	tabName: string;
 	contentType: TabContentType;
 	content: string;
-	course: {
-		courseId: number;
-	};
-}
-
-export interface UpdateTabRequest extends CreateTabRequest {
-	tabId: number;
-}
-
-export interface Tab extends CreateTabRequest {
-	tab_id: number;
+	courseId: number;
+	file: FormData;
 	course: Course;
 	completed: boolean;
 }
@@ -34,26 +25,26 @@ export const tabsApi = apiSlice.injectEndpoints({
 				{ type: "Tab", id: arg.courseId },
 			],
 		}),
-		createTab: builder.mutation<void, CreateTabRequest>({
-			query: ({ tabName, contentType, content, course }) => ({
+		createTab: builder.mutation<void, FormData>({
+			query: (formdata) => ({
 				url: "tabs/create",
 				method: "POST",
-				body: { tabName, contentType, content, course },
+				body: formdata,
 			}),
 			invalidatesTags: (arg: any) => [
-				{ type: "Tab", id: arg.course.courseId },
+				{ type: "Tab", id: arg.formdata.get("courseId") },
 			],
 		}),
-		editTab: builder.mutation<void, UpdateTabRequest>({
-			query: ({ tabId, tabName, contentType, content, course }) => ({
-				url: `tabs/edit/${tabId}`,
-				method: "POST",
-				body: { tabName, contentType, content, course },
-			}),
-			invalidatesTags: (arg: any) => [
-				{ type: "Tab", id: arg.course.courseId },
-			],
-		}),
+		// editTab: builder.mutation<void, FormData>({
+		// 	query: (formdata) => ({
+		// 		url: `tabs/edit/${tabId}`,
+		// 		method: "POST",
+		// 		body: { tabName, contentType, content, course },
+		// 	}),
+		// 	invalidatesTags: (arg: any) => [
+		// 		{ type: "Tab", id: arg.course.courseId },
+		// 	],
+		// }),
 		completeTab: builder.mutation<
 			void,
 			{ tabId: number; courseId: number }
@@ -69,3 +60,9 @@ export const tabsApi = apiSlice.injectEndpoints({
 		}),
 	}),
 });
+
+export const {
+	useGetTabByIdQuery,
+	useCreateTabMutation,
+	useCompleteTabMutation,
+} = tabsApi;
