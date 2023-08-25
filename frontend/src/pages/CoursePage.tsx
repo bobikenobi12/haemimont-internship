@@ -8,11 +8,14 @@ import {
 	Button,
 	Flex,
 	useToast,
+	VStack,
 	HStack,
 	Avatar,
 	Divider,
 	useColorModeValue,
+	Tooltip,
 } from "@chakra-ui/react";
+
 import { motion } from "framer-motion";
 
 import { useParams } from "react-router-dom";
@@ -28,6 +31,7 @@ import {
 } from "../features/courses/courseApiSlice";
 
 import EditCourseModal from "../components/EditCourseModal";
+import CreateTabModal from "../components/CreateTabModal";
 
 export default function CoursePage() {
 	const [joinCourse, { isLoading: isLoadingJoinCourse }] =
@@ -250,20 +254,36 @@ export default function CoursePage() {
 						{course.course.description}
 					</Text>
 				</Box>
-				<HStack
+				<VStack
 					p={4}
 					spacing={4}
 					flexWrap="wrap"
 					borderRadius="lg"
 					bg={useColorModeValue("gray.100", "gray.600")}
 				>
-					{course.course.tabs === null ||
-					course.course.tabs?.length === 0 ? (
-						<Heading fontSize="lg" p="4">
-							There are no tabs yet
+					<HStack w="100%" justifyContent="space-between">
+						<Heading fontSize="xl" fontWeight="bold">
+							There are{" "}
+							{course.course.tabs !== null &&
+							course.course.tabs !== undefined &&
+							course.course.tabs.length
+								? course.course.tabs.length
+								: 0}{" "}
+							Tabs
 						</Heading>
-					) : (
-						course.course.tabs?.map((tab) => (
+						{role === "TEACHER" && (
+							<Tooltip label="Add tab" aria-label="Add tab">
+								<CreateTabModal
+									courseId={course.course.courseId}
+								/>
+							</Tooltip>
+						)}
+					</HStack>
+					<Divider />
+					{course.course.tabs !== null &&
+						course.course.tabs !== undefined &&
+						course.course.tabs.length > 0 &&
+						course.course.tabs.map((tab) => (
 							<Card
 								key={tab.tab_id}
 								w="100%"
@@ -283,9 +303,8 @@ export default function CoursePage() {
 									<Text>Module {tab.tab_id}</Text>
 								</CardBody>
 							</Card>
-						))
-					)}
-				</HStack>
+						))}
+				</VStack>
 			</Flex>
 		</Box>
 	);
