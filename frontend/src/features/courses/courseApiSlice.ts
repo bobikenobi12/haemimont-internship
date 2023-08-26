@@ -1,5 +1,6 @@
 import { apiSlice } from "../../app/api/apiSlice";
 import { Role } from "../auth/authApiSlice";
+import type { TabPreview } from "../tabs/tabsApiSlice";
 export interface Teacher {
 	name: string;
 	user: {
@@ -21,10 +22,7 @@ export interface Course {
 	picturePath: string;
 	studentsCount: number;
 	time_created: string;
-	tabs?: {
-		tab_id: number;
-		tabName: string;
-	}[];
+	tabs?: TabPreview[];
 }
 
 export enum CourseStatus {
