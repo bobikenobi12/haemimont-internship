@@ -107,7 +107,10 @@ export default function CreateTabModal({ courseId }: Props) {
 			const formData = new FormData();
 			formData.append("file", data.file ? data.file : "");
 			formData.append("tabName", data.name);
-			formData.append("contentType", data.contentType);
+			formData.append(
+				"contentType",
+				data.contentType ? data.contentType : ""
+			);
 			formData.append("content", data.content ? data.content : "");
 			formData.append("courseId", courseId.toString());
 
@@ -118,8 +121,8 @@ export default function CreateTabModal({ courseId }: Props) {
 				duration: 5000,
 				isClosable: true,
 			});
-			reset();
-			onClose?.();
+			// reset();
+			onClose();
 		} catch (err: any) {
 			console.log(err.message);
 			toast({
