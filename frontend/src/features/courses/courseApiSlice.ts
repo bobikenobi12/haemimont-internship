@@ -28,6 +28,7 @@ export interface Course {
 export enum CourseStatus {
 	COMPLETED = "COMPLETED",
 	CAN_COMPLETE = "CAN_COMPLETE",
+	START_QUIZ = "START_QUIZ",
 	CAN_ENROLL = "CAN_ENROLL",
 }
 
