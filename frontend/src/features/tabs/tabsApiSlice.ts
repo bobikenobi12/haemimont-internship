@@ -8,12 +8,12 @@ export enum TabContentTypeEnum {
 export interface TabPreview {
 	tab_id: number;
 	tabName: string;
+	completed: boolean;
 }
 export interface Tab extends TabPreview {
 	contentType: TabContentTypeEnum;
 	content: string;
 	courseId: number;
-	completed: boolean;
 }
 
 export const tabsApi = apiSlice.injectEndpoints({
@@ -33,6 +33,7 @@ export const tabsApi = apiSlice.injectEndpoints({
 			}),
 			invalidatesTags: (arg: any) => [
 				{ type: "Tab", id: arg.formdata.get("courseId") },
+				{ type: "Course", id: arg.formdata.get("courseId") },
 			],
 		}),
 		// editTab: builder.mutation<void, FormData>({
@@ -56,6 +57,7 @@ export const tabsApi = apiSlice.injectEndpoints({
 			invalidatesTags: (arg: any) => [
 				{ type: "Tab", id: arg.courseId },
 				{ type: "Tab", id: arg.tabId },
+				{ type: "Course", id: arg.courseId },
 			],
 		}),
 	}),
