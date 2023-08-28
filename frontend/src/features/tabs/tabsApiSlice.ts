@@ -31,10 +31,7 @@ export const tabsApi = apiSlice.injectEndpoints({
 				method: "POST",
 				body: formdata,
 			}),
-			invalidatesTags: (arg: any) => [
-				{ type: "Tab", id: arg.formdata.get("courseId") },
-				{ type: "Course", id: arg.formdata.get("courseId") },
-			],
+			invalidatesTags: ["Course"],
 		}),
 		// editTab: builder.mutation<void, FormData>({
 		// 	query: (formdata) => ({

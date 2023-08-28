@@ -32,6 +32,7 @@ import {
 
 import EditCourseModal from "../components/EditCourseModal";
 import CreateTabModal from "../components/CreateTabModal";
+import CreateQuestionModal from "../components/CreateQuestionModal";
 
 export default function CoursePage() {
 	const [joinCourse, { isLoading: isLoadingJoinCourse }] =
@@ -57,7 +58,7 @@ export default function CoursePage() {
 	});
 
 	if (error) return <div>Failed to load course</div>;
-	if (isLoading) return <div>Loading...</div>;
+	if (isLoading || !role || !email) return <div>Loading...</div>;
 	if (!course) return <div>Course not found</div>;
 
 	return (
@@ -312,6 +313,13 @@ export default function CoursePage() {
 						))}
 				</VStack>
 			</Flex>
+			<Divider display={{ base: "block", md: "none" }} h={2} my={4} />
+			<Heading fontSize="xl" fontWeight="bold" p="4">
+				Quiz
+			</Heading>
+			{role === "TEACHER" && (
+				<CreateQuestionModal courseId={course.course.courseId} />
+			)}
 		</Box>
 	);
 }

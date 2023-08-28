@@ -112,6 +112,7 @@ export const {
 	useRegisterMutation,
 	useLoginMutation,
 	useGetProfileQuery,
+	useLazyGetProfileQuery,
 	useSetProfilePictureMutation,
 	useUpdateNameMutation,
 	useChangeEmailMutation,
