@@ -10,6 +10,7 @@ import TermsOfService from "./pages/TermsOfService";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import UserProfilePage from "./pages/UserProfilePage";
 import CreateCoursePage from "./pages/CreateCoursePage";
+import TabPage from "./pages/TabPage";
 
 // Components
 import NavBar from "./components/NavBar";
@@ -44,6 +45,10 @@ function App() {
 					{/* Public routes */}
 					<Route path="/courses" element={<CoursesPage />} />
 					<Route path="/courses/:courseId" element={<CoursePage />} />
+					<Route
+						path="/courses/:courseId/:tabId"
+						element={<TabPage />}
+					/>
 
 					{/* Teacher routes */}
 					<Route

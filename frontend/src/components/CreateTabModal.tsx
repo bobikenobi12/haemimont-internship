@@ -180,7 +180,10 @@ export default function CreateTabModal({ courseId }: Props) {
 										(errors?.contentType.message as string)}
 								</FormErrorMessage>
 							</FormControl>
-							<FormControl isInvalid={!!errors.content}>
+							<FormControl
+								isInvalid={!!errors.content}
+								isRequired
+							>
 								<FormLabel>{"Content"}</FormLabel>
 								<Textarea
 									placeholder="Content"
@@ -191,7 +194,7 @@ export default function CreateTabModal({ courseId }: Props) {
 										(errors?.content.message as string)}
 								</FormErrorMessage>
 							</FormControl>
-							<FormControl isInvalid={!!errors.file}>
+							<FormControl isInvalid={!!errors.file} isRequired>
 								<FormLabel>{"File input"}</FormLabel>
 								<FileUpload onDrop={onDrop} />
 								{getValues("file") && (
@@ -244,11 +247,7 @@ export default function CreateTabModal({ courseId }: Props) {
 								mr={3}
 								onClick={onOpen}
 								isLoading={isLoading}
-								isDisabled={
-									isSubmitting ||
-									(getValues("file") === undefined &&
-										getValues("content") === undefined)
-								}
+								isDisabled={isSubmitting}
 								type="submit"
 							>
 								Save
