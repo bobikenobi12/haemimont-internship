@@ -18,15 +18,9 @@ import {
 } from "@chakra-ui/react";
 
 import { useAppSelector } from "../app/hooks";
-import {
-	selectToken,
-	selectName,
-	selectCredit,
-	selectRole,
-	selectPicturePath,
-} from "../features/auth/authSlice";
+import { selectToken } from "../features/auth/authSlice";
 
-import { usePrefetch } from "../features/auth/authApiSlice";
+import { useGetProfileQuery } from "../features/auth/authApiSlice";
 
 import { useNavigate, Outlet, Link as RouterLink } from "react-router-dom";
 
@@ -83,12 +77,17 @@ export default function NavBar() {
 	const { isOpen, onOpen, onClose } = useDisclosure();
 
 	const token = useAppSelector(selectToken);
-	const name = useAppSelector(selectName);
-	const credit = useAppSelector(selectCredit);
-	const role = useAppSelector(selectRole);
-	const picturePath = useAppSelector(selectPicturePath);
 
-	const prefetchUser = usePrefetch("getProfile");
+	const {
+		data: profile,
+		error,
+		isLoading,
+		refetch: prefetchUser,
+	} = useGetProfileQuery();
+
+	if (error) return <div>Failed to load user</div>;
+	if (isLoading) return <div>Loading...</div>;
+	if (!profile) return <div>User not found</div>;
 
 	return (
 		<>
@@ -128,7 +127,9 @@ export default function NavBar() {
 							<SearchCourses />
 						</Box>
 						<ThemeToggle />
-						{token && role === "TEACHER" && <CreateCourseModal />}
+						{token && profile.role === "TEACHER" && (
+							<CreateCourseModal />
+						)}
 						{!token && (
 							<>
 								<Link
@@ -168,16 +169,19 @@ export default function NavBar() {
 									cursor={"pointer"}
 									minW={0}
 								>
-									{picturePath ? (
+									{profile.picturePath ? (
 										<Avatar
 											size={"sm"}
 											src={
 												import.meta.env.VITE_API_URL +
-												picturePath
+												profile.picturePath
 											}
 										/>
-									) : name ? (
-										<Avatar size={"sm"} name={name} />
+									) : profile.name ? (
+										<Avatar
+											size={"sm"}
+											name={profile.name}
+										/>
 									) : (
 										<Spinner />
 									)}
@@ -186,13 +190,13 @@ export default function NavBar() {
 									justifyContent={"center"}
 									alignItems={"center"}
 								>
-									{role === "STUDENT" && (
+									{profile.role === "STUDENT" && (
 										<MenuItem
 											as={RouterLink}
 											to="/user/credit"
 										>
-											{credit !== null ? (
-												"Credit:" + credit
+											{profile.credit !== null ? (
+												"Credit:" + profile.credit
 											) : (
 												<Spinner />
 											)}
