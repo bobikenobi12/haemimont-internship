@@ -1,5 +1,4 @@
 import { apiSlice } from "../../app/api/apiSlice";
-import { type Course } from "../courses/courseApiSlice";
 
 export enum TabContentTypeEnum {
 	TEXT = "TEXT",
@@ -14,8 +13,6 @@ export interface Tab extends TabPreview {
 	contentType: TabContentTypeEnum;
 	content: string;
 	courseId: number;
-	file: FormData;
-	course: Course;
 	completed: boolean;
 }
 

@@ -18,7 +18,7 @@ import {
 
 import { motion } from "framer-motion";
 
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 import { useGetCourseByIdQuery } from "../features/courses/courseApiSlice";
 
@@ -39,6 +39,7 @@ export default function CoursePage() {
 	const [completeCourse, { isLoading: isLoadingCompleteCourse }] =
 		useCompleteCourseMutation();
 
+	const navigate = useNavigate();
 	const toast = useToast();
 	const role = useAppSelector(selectRole);
 	const email = useAppSelector(selectEmail);
@@ -295,6 +296,11 @@ export default function CoursePage() {
 								}}
 								whileTap={{ scale: 0.95 }}
 								cursor={"pointer"}
+								onClick={() =>
+									navigate(
+										`/courses/${course.course.courseId}/${tab.tab_id}`
+									)
+								}
 							>
 								<CardBody>
 									<Heading fontSize="xl" fontWeight="bold">
