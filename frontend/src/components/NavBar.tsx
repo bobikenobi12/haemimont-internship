@@ -20,7 +20,10 @@ import {
 import { useAppSelector } from "../app/hooks";
 import { selectToken } from "../features/auth/authSlice";
 
-import { useGetProfileQuery } from "../features/auth/authApiSlice";
+import {
+	useLazyGetProfileQuery,
+	usePrefetch,
+} from "../features/auth/authApiSlice";
 
 import { useNavigate, Outlet, Link as RouterLink } from "react-router-dom";
 
@@ -30,6 +33,7 @@ import SignOutDialog from "./SignOutDialog";
 import ThemeToggle from "./ThemeToggle";
 import CreateCourseModal from "./CreateCourseModal";
 import SearchCourses from "./SearchCourses";
+import { useEffect } from "react";
 interface Props {
 	children: React.ReactNode;
 	href: string;
@@ -78,16 +82,20 @@ export default function NavBar() {
 
 	const token = useAppSelector(selectToken);
 
-	const {
-		data: profile,
-		error,
-		isLoading,
-		refetch: prefetchUser,
-	} = useGetProfileQuery();
+	const prefetchUser = usePrefetch("getProfile");
+
+	const [getProfile, { data: profile, error, isLoading }] =
+		useLazyGetProfileQuery();
+
+	useEffect(() => {
+		if (token) {
+			getProfile();
+		}
+	}, [token, getProfile]);
 
 	if (error) return <div>Failed to load user</div>;
 	if (isLoading) return <div>Loading...</div>;
-	if (!profile) return <div>User not found</div>;
+	if (!profile && token) return <div>User not found</div>;
 
 	return (
 		<>
@@ -127,7 +135,7 @@ export default function NavBar() {
 							<SearchCourses />
 						</Box>
 						<ThemeToggle />
-						{token && profile.role === "TEACHER" && (
+						{token && profile?.role === "TEACHER" && (
 							<CreateCourseModal />
 						)}
 						{!token && (
@@ -169,7 +177,7 @@ export default function NavBar() {
 									cursor={"pointer"}
 									minW={0}
 								>
-									{profile.picturePath ? (
+									{profile?.picturePath ? (
 										<Avatar
 											size={"sm"}
 											src={
@@ -177,10 +185,10 @@ export default function NavBar() {
 												profile.picturePath
 											}
 										/>
-									) : profile.name ? (
+									) : profile?.name ? (
 										<Avatar
 											size={"sm"}
-											name={profile.name}
+											name={profile?.name}
 										/>
 									) : (
 										<Spinner />
@@ -190,7 +198,7 @@ export default function NavBar() {
 									justifyContent={"center"}
 									alignItems={"center"}
 								>
-									{profile.role === "STUDENT" && (
+									{profile?.role === "STUDENT" && (
 										<MenuItem
 											as={RouterLink}
 											to="/user/credit"
