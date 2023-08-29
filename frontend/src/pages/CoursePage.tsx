@@ -154,6 +154,19 @@ export default function CoursePage() {
 								</Button>
 							)}
 						{role === "STUDENT" &&
+							course.stateEnum === "START_QUIZ" && (
+								<Button
+									colorScheme="purple"
+									onClick={() => {
+										navigate(
+											`/courses/${course.course.courseId}/quiz`
+										);
+									}}
+								>
+									Start the quiz
+								</Button>
+							)}
+						{role === "STUDENT" &&
 							course.stateEnum === "COMPLETED" && (
 								<Text fontSize="lg" color="green.500">
 									Course completed
@@ -313,12 +326,18 @@ export default function CoursePage() {
 						))}
 				</VStack>
 			</Flex>
-			<Divider display={{ base: "block", md: "none" }} h={2} my={4} />
-			<Heading fontSize="xl" fontWeight="bold" p="4">
-				Quiz
-			</Heading>
 			{role === "TEACHER" && (
-				<CreateQuestionModal courseId={course.course.courseId} />
+				<>
+					<Divider
+						display={{ base: "block", md: "none" }}
+						h={2}
+						my={4}
+					/>
+					<Heading fontSize="xl" fontWeight="bold" p="4">
+						Quiz
+					</Heading>
+					<CreateQuestionModal courseId={course.course.courseId} />
+				</>
 			)}
 		</Box>
 	);
