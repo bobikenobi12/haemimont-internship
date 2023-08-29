@@ -6,6 +6,7 @@ export interface Question {
 	answers: {
 		answer: string;
 	}[];
+	points: number;
 	courseId: number;
 }
 
@@ -17,7 +18,7 @@ export const quizApi = apiSlice.injectEndpoints({
 			}
 		),
 		createQuestion: builder.mutation<void, Question>({
-			query: ({ courseId, answers, question, rightAnswer }) => ({
+			query: ({ courseId, answers, question, rightAnswer, points }) => ({
 				url: "quiz/addQuestion/" + courseId,
 				method: "POST",
 				body: [
@@ -25,6 +26,7 @@ export const quizApi = apiSlice.injectEndpoints({
 						question: question,
 						rightAnswer: rightAnswer,
 						answers: answers,
+						points: points,
 					},
 				],
 			}),
