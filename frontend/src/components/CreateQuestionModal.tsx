@@ -18,6 +18,11 @@ import {
 	useToast,
 	Tooltip,
 	Icon,
+	NumberInput,
+	NumberInputField,
+	NumberInputStepper,
+	NumberIncrementStepper,
+	NumberDecrementStepper,
 } from "@chakra-ui/react";
 import { AddIcon, DeleteIcon } from "@chakra-ui/icons";
 
@@ -36,6 +41,7 @@ const schema = z.object({
 		.array()
 		.min(2)
 		.max(6),
+	points: z.number().min(1).max(10),
 });
 
 type FormValues = z.infer<typeof schema>;
@@ -55,7 +61,9 @@ export default function CreateQuestionModal({ courseId }: Props) {
 		question: "How are you feeling today?",
 		rightAnswer: "Great!",
 		answers: [{ answer: "Great!" }, { answer: "Amazing!" }],
+		points: 1,
 	};
+
 	const {
 		register,
 		handleSubmit,
@@ -79,6 +87,7 @@ export default function CreateQuestionModal({ courseId }: Props) {
 				rightAnswer: data.rightAnswer,
 				answers: data.answers,
 				courseId: courseId,
+				points: data.points,
 			}).unwrap();
 			toast({
 				title: "Question created",
@@ -123,6 +132,23 @@ export default function CreateQuestionModal({ courseId }: Props) {
 								/>
 								<FormErrorMessage>
 									{errors.question?.message}
+								</FormErrorMessage>
+							</FormControl>
+							<FormControl isInvalid={!!errors.points}>
+								<FormLabel htmlFor="points">Points</FormLabel>
+								<NumberInput id="points" min={1} max={10}>
+									<NumberInputField
+										{...register("points", {
+											valueAsNumber: true,
+										})}
+									/>
+									<NumberInputStepper>
+										<NumberIncrementStepper />
+										<NumberDecrementStepper />
+									</NumberInputStepper>
+								</NumberInput>
+								<FormErrorMessage>
+									{errors.points?.message}
 								</FormErrorMessage>
 							</FormControl>
 							{getValues("answers").map((ans, idx) => {

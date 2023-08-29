@@ -2,9 +2,10 @@ import { createSlice } from "@reduxjs/toolkit";
 import { courseApi } from "../courses/courseApiSlice";
 import type { RootState } from "../../app/store";
 import type { TabPreview } from "./tabsApiSlice";
-
+import { CourseStatus } from "../courses/courseApiSlice";
 export interface TabState {
 	tabs: TabPreview[];
+	courseStatus?: CourseStatus;
 }
 
 const initialState: TabState = {
@@ -22,6 +23,7 @@ export const tabSlice = createSlice({
 				if (action.payload.course.tabs) {
 					state.tabs = action.payload.course.tabs;
 				}
+				state.courseStatus = action.payload.stateEnum;
 			}
 		);
 	},
@@ -51,6 +53,10 @@ export const selectPreviousTabId = (state: RootState, tabId: number) => {
 
 export const areTabsCompleted = (state: RootState) => {
 	return state.tab.tabs.every((tab) => tab.completed);
+};
+
+export const selectStatusEnum = (state: RootState) => {
+	return state.tab.courseStatus;
 };
 
 export default tabSlice.reducer;
