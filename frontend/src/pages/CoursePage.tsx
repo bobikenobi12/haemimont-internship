@@ -27,7 +27,7 @@ import { selectRole, selectEmail } from "../features/auth/authSlice";
 
 import {
 	useJoinCourseMutation,
-	useCompleteCourseMutation,
+	// useCompleteCourseMutation,
 } from "../features/courses/courseApiSlice";
 
 import EditCourseModal from "../components/EditCourseModal";
@@ -37,8 +37,8 @@ import CreateQuestionModal from "../components/CreateQuestionModal";
 export default function CoursePage() {
 	const [joinCourse, { isLoading: isLoadingJoinCourse }] =
 		useJoinCourseMutation();
-	const [completeCourse, { isLoading: isLoadingCompleteCourse }] =
-		useCompleteCourseMutation();
+	// const [completeCourse, { isLoading: isLoadingCompleteCourse }] =
+	// 	useCompleteCourseMutation();
 
 	const navigate = useNavigate();
 	const toast = useToast();
@@ -89,8 +89,8 @@ export default function CoursePage() {
 					</Heading>
 
 					<Box mb="4" display={"flex"} gap={4} alignItems={"center"}>
-						{role === "STUDENT" &&
-							course.stateEnum === "CAN_COMPLETE" && (
+						{/* {role === "STUDENT" &&
+							course.stateEnum === "START_QUIZ" && (
 								<Button
 									colorScheme="purple"
 									isLoading={isLoadingCompleteCourse}
@@ -120,7 +120,7 @@ export default function CoursePage() {
 								>
 									Complete the course
 								</Button>
-							)}
+							)} */}
 						{role === "STUDENT" &&
 							course.stateEnum === "CAN_ENROLL" && (
 								<Button

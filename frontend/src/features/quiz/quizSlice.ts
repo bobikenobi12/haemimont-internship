@@ -4,10 +4,12 @@ import type { Question } from "./quizApiSlice";
 
 export interface QuizState {
 	questions: Question[];
+	currentQuestion: Question | null;
 }
 
 const initialState: QuizState = {
 	questions: [],
+	currentQuestion: null,
 };
 
 export const quizSlice = createSlice({

@@ -22,13 +22,14 @@ export interface Course {
 	picturePath: string;
 	studentsCount: number;
 	time_created: string;
+	rating: number;
 	tabs?: TabPreview[];
 }
 
 export enum CourseStatus {
 	COMPLETED = "COMPLETED",
-	CAN_COMPLETE = "CAN_COMPLETE",
 	START_QUIZ = "START_QUIZ",
+	COMPLETE_TABS = "COMPLETE_TABS",
 	CAN_ENROLL = "CAN_ENROLL",
 }
 
