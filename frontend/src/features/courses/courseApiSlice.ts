@@ -261,6 +261,26 @@ export const courseApi = apiSlice.injectEndpoints({
 				"Course",
 			],
 		}),
+		rateCourse: builder.mutation<
+			void,
+			{ courseId: number; rating: number }
+		>({
+			query: ({ courseId, rating }) => ({
+				url: "rating/rateCourse",
+				method: "POST",
+				params: {
+					course_id: courseId,
+					rating,
+				},
+			}),
+			invalidatesTags: (arg: any) => [
+				{
+					type: "Course" as const,
+					id: arg.courseId as number,
+				},
+				"Course",
+			],
+		}),
 	}),
 });
 
@@ -276,4 +296,5 @@ export const {
 	useFindCoursesByNameQuery,
 	useGetCourseByIdQuery,
 	useEditCourseMutation,
+	useRateCourseMutation,
 } = courseApi;
