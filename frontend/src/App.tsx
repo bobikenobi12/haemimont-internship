@@ -19,6 +19,7 @@ import NavBar from "./components/NavBar";
 // Guards
 import RequireAuth from "./utils/RequireAuth";
 import PublicOutlet from "./utils/PublicOutlet";
+import HomePage from "./pages/HomePage";
 
 function App() {
 	return (
@@ -60,6 +61,8 @@ function App() {
 						path="create-course"
 						element={<CreateCoursePage />}
 					/>
+				<Route path="/home-page" element={<HomePage />}/>
+
 				</Route>
 				<Route path="/terms-of-service" element={<TermsOfService />} />
 				<Route path="/privacy-policy" element={<PrivacyPolicy />} />
