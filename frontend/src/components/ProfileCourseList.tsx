@@ -93,11 +93,16 @@ export default function ProfileCourseList({
 
 	if (!fetchedData) return <div>No courses found</div>;
 
+	console.log(fetchedData);
+
 	return (
 		<Card>
 			<Stack>
 				<CardBody>
 					<Accordion defaultIndex={[0]}>
+						{fetchedData.courses.length === 0 && (
+							<Text>No courses found</Text>
+						)}
 						{fetchedData.courses.map((course) => (
 							<AccordionItem key={course.courseId}>
 								<AccordionButton>

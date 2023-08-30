@@ -277,6 +277,7 @@ export default function CoursesPage() {
 							time_created,
 						}: CourseProps) => (
 							<Course
+								rating={0}
 								key={courseId}
 								courseId={courseId}
 								courseName={courseName}
