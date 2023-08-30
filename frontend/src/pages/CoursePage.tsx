@@ -14,7 +14,9 @@ import {
 	Divider,
 	useColorModeValue,
 	Tooltip,
+	Badge,
 } from "@chakra-ui/react";
+import { StarIcon } from "@chakra-ui/icons";
 
 import { motion } from "framer-motion";
 
@@ -33,6 +35,7 @@ import {
 import EditCourseModal from "../components/EditCourseModal";
 import CreateTabModal from "../components/CreateTabModal";
 import CreateQuestionModal from "../components/CreateQuestionModal";
+import RateCoursezModal from "../components/RateCourseModal";
 
 export default function CoursePage() {
 	const [joinCourse, { isLoading: isLoadingJoinCourse }] =
@@ -67,6 +70,7 @@ export default function CoursePage() {
 				direction={["column", "column", "row", "row"]}
 				w="100%"
 				p={4}
+				pb={{ base: "0", md: "4" }}
 				bg={{
 					base: useColorModeValue("white", "gray.800"),
 					md: useColorModeValue("gray.100", "gray.900"),
@@ -168,9 +172,9 @@ export default function CoursePage() {
 							)}
 						{role === "STUDENT" &&
 							course.stateEnum === "COMPLETED" && (
-								<Text fontSize="lg" color="green.500">
-									Course completed
-								</Text>
+								<RateCoursezModal
+									courseId={course.course.courseId}
+								/>
 							)}
 						{role === "TEACHER" &&
 							course.course.teacher.user.email === email && (
@@ -210,6 +214,7 @@ export default function CoursePage() {
 								import.meta.env.VITE_API_URL +
 								course.course.teacher.user.picturePath
 							}
+							name={course.course.teacher.name}
 						/>
 						<Text>Teacher: {course.course.teacher.name}</Text>
 					</HStack>
@@ -231,9 +236,17 @@ export default function CoursePage() {
 					p="4"
 					textAlign={{ base: "left", md: "center" }}
 				>
-					<Heading fontSize="xl" fontWeight="bold">
-						4,7 / 5
-					</Heading>
+					<Flex
+						alignItems="center"
+						gap={2}
+						justifyContent={{ base: "left", md: "center" }}
+					>
+						<Heading fontSize="xl" fontWeight="bold">
+							{course.course.rating.toFixed(1)}
+						</Heading>
+						<StarIcon color="yellow.500" />
+					</Flex>
+
 					<Text>(1,234 ratings)</Text>
 				</Box>
 				<Divider orientation="vertical" />
@@ -243,7 +256,7 @@ export default function CoursePage() {
 					textAlign={{ base: "left", md: "center" }}
 				>
 					<Heading fontSize="xl" fontWeight="bold">
-						Approx. {course.course.duration} hours to complete
+						Approx. {course.course.duration.toLocaleString()} hours
 					</Heading>
 					<Text>{Math.floor(course.course.duration / 24)} days</Text>
 				</Box>
@@ -276,16 +289,37 @@ export default function CoursePage() {
 					borderRadius="lg"
 					bg={useColorModeValue("gray.100", "gray.600")}
 				>
-					<HStack w="100%" justifyContent="space-between">
-						<Heading fontSize="xl" fontWeight="bold">
-							There are{" "}
-							{course.course.tabs !== null &&
-							course.course.tabs !== undefined &&
-							course.course.tabs.length
-								? course.course.tabs.length
-								: 0}{" "}
-							Tabs
-						</Heading>
+					<Flex
+						w="100%"
+						justifyContent="space-between"
+						p="4"
+						direction={["column", "column", "row", "row"]}
+					>
+						{course.course.tabs !== null &&
+							course.course.tabs !== undefined && (
+								<Flex
+									direction={{ base: "column", md: "row" }}
+									justifyContent="space-between"
+									alignItems="center"
+									w="100%"
+								>
+									<Heading fontSize="xl" fontWeight="bold">
+										There are{" "}
+										{course.course.tabs.length
+											? course.course.tabs.length
+											: 0}{" "}
+										Tabs
+									</Heading>
+									<Text>
+										{
+											course.course.tabs.filter(
+												(tab) => tab.completed
+											).length
+										}{" "}
+										/ {course.course.tabs.length} completed
+									</Text>
+								</Flex>
+							)}
 						{role === "TEACHER" && (
 							<Tooltip label="Add tab" aria-label="Add tab">
 								<CreateTabModal
@@ -293,7 +327,7 @@ export default function CoursePage() {
 								/>
 							</Tooltip>
 						)}
-					</HStack>
+					</Flex>
 					<Divider />
 					{course.course.tabs !== null &&
 						course.course.tabs !== undefined &&
@@ -317,10 +351,33 @@ export default function CoursePage() {
 								}
 							>
 								<CardBody>
-									<Heading fontSize="xl" fontWeight="bold">
-										{tab.tabName}
-									</Heading>
-									<Text>Module {tab.tab_id}</Text>
+									<Flex
+										justifyContent="space-between"
+										alignItems={"center"}
+									>
+										<Box>
+											<Heading
+												fontSize="xl"
+												fontWeight="bold"
+											>
+												{tab.tabName}
+											</Heading>
+											<Text>Module {tab.tab_id}</Text>
+										</Box>
+										<Badge
+											ml="1"
+											fontSize="0.8em"
+											colorScheme={
+												tab.completed
+													? "green"
+													: "yellow"
+											}
+										>
+											{tab.completed
+												? "Completed"
+												: "Not completed"}
+										</Badge>
+									</Flex>
 								</CardBody>
 							</Card>
 						))}
