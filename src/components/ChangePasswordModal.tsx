@@ -100,6 +100,7 @@ export default function ChangePasswordModal() {
 			onClick={onOpen}
 			colorScheme="blue"
 			variant="outline"
+			// eslint-disable-next-line react-hooks/rules-of-hooks
 			color={useColorModeValue("gray.700", "gray.200")}
 		>
 			Change Password

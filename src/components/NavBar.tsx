@@ -65,6 +65,7 @@ const NavLink = ({ children, href }: Props) => {
 			rounded={"md"}
 			_hover={{
 				textDecoration: "none",
+				// eslint-disable-next-line react-hooks/rules-of-hooks
 				bg: useColorModeValue("gray.200", "gray.700"),
 			}}
 			cursor={"pointer"}
@@ -99,7 +100,11 @@ export default function NavBar() {
 
 	return (
 		<>
-			<Box bg={useColorModeValue("gray.100", "gray.900")} px={4}>
+			<Box
+				// eslint-disable-next-line react-hooks/rules-of-hooks
+				bg={useColorModeValue("gray.100", "gray.900")}
+				px={4}
+			>
 				<Flex
 					h={16}
 					alignItems={"center"}

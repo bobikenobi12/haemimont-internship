@@ -72,7 +72,9 @@ export default function CoursePage() {
 				p={4}
 				pb={{ base: "0", md: "4" }}
 				bg={{
+					// eslint-disable-next-line react-hooks/rules-of-hooks
 					base: useColorModeValue("white", "gray.800"),
+					// eslint-disable-next-line react-hooks/rules-of-hooks
 					md: useColorModeValue("gray.100", "gray.900"),
 				}}
 			>
@@ -226,10 +228,12 @@ export default function CoursePage() {
 				w={{ base: "100%", md: "100%", lg: "80%" }}
 				p={{ base: "4", md: "12" }}
 				borderRadius={{ base: "0", md: "lg" }}
+				// eslint-disable-next-line react-hooks/rules-of-hooks
 				bg={useColorModeValue("white", "gray.700")}
 				boxShadow={{ base: "none", md: "lg" }}
 				justifyContent={"space-between"}
 				mx={"auto"}
+				h={{ base: "auto", md: "auto", lg: "200px" }}
 			>
 				<Box
 					w={["100%", "100%", "33%", "33%"]}
@@ -260,7 +264,7 @@ export default function CoursePage() {
 					</Heading>
 					<Text>{Math.floor(course.course.duration / 24)} days</Text>
 				</Box>
-				<Divider orientation="vertical" color={"gray.500"} />
+				<Divider orientation="vertical" />
 				<Box
 					w={["100%", "100%", "33%", "33%"]}
 					p="4"
@@ -287,6 +291,7 @@ export default function CoursePage() {
 					spacing={4}
 					flexWrap="wrap"
 					borderRadius="lg"
+					// eslint-disable-next-line react-hooks/rules-of-hooks
 					bg={useColorModeValue("gray.100", "gray.600")}
 				>
 					<Flex

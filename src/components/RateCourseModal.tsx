@@ -106,11 +106,11 @@ export default function RateCoursezModal({ courseId }: Props) {
 											as={motion.div}
 											whileHover={{ scale: 1.2 }}
 											whileTap={{ scale: 0.8 }}
+											key={i}
 										>
 											<Icon
 												as={StarIcon}
 												boxSize={8}
-												key={i}
 												color={
 													i + 1 <= getValues("rating")
 														? "purple.500"
