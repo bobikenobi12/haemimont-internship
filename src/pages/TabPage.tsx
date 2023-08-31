@@ -1,4 +1,13 @@
-import { Box, Button, Flex, useToast } from "@chakra-ui/react";
+import {
+	Box,
+	Button,
+	Flex,
+	Icon,
+	IconButton,
+	Tooltip,
+	useToast,
+} from "@chakra-ui/react";
+import { ArrowBackIcon } from "@chakra-ui/icons";
 
 import { useParams, useNavigate } from "react-router-dom";
 
@@ -52,14 +61,42 @@ export default function TabPage() {
 
 	return (
 		<Box mt="10" mx="auto" maxW="container.lg">
-			<HStack alignItems={"center"}>
-				<Heading>{tab.tabName}</Heading>
-				<Badge colorScheme="blue" variant="outline">
-					{tab.contentType}
-				</Badge>
-				{tab.completed && <Badge colorScheme="green">Completed</Badge>}
-			</HStack>
-			<Divider />
+			<Flex
+				justifyContent="flex-start"
+				alignItems="center"
+				gap={4}
+				ml={4}
+			>
+				<Tooltip
+					label={"Back to course"}
+					aria-label={"Back to course"}
+					hasArrow
+				>
+					<IconButton
+						aria-label="Back"
+						icon={<Icon as={ArrowBackIcon} />}
+						onClick={() => {
+							navigate(`/courses/${courseId}`);
+						}}
+					/>
+				</Tooltip>
+				<HStack alignItems={"center"} gap={4}>
+					<Heading>{tab.tabName}</Heading>
+					<Flex
+						direction={{ base: "column", md: "row" }}
+						gap={2}
+						alignItems={"center"}
+					>
+						<Badge colorScheme="blue" variant="outline">
+							{tab.contentType}
+						</Badge>
+						{tab.completed && (
+							<Badge colorScheme="green">Completed</Badge>
+						)}
+					</Flex>
+				</HStack>
+			</Flex>
+			<Divider my={4} />
 			{tab.contentType === "TEXT" ? (
 				<Box>{tab.content}</Box>
 			) : (
@@ -79,32 +116,46 @@ export default function TabPage() {
 				gap={4}
 			>
 				{role === "STUDENT" && (
-					<Button
-						isDisabled={tab.completed}
-						onClick={async () => {
-							try {
-								await completeTab({
-									courseId: parseInt(courseId),
-									tabId: parseInt(tabId),
-								}).unwrap();
-								toast({
-									title: "Tab completed",
-									status: "success",
-									duration: 3000,
-									isClosable: true,
-								});
-							} catch (err) {
-								toast({
-									title: "Failed to complete tab",
-									status: "error",
-									duration: 5000,
-									isClosable: true,
-								});
-							}
-						}}
+					<Tooltip
+						label={
+							tab.completed
+								? "You have already completed this tab"
+								: ""
+						}
+						aria-label={
+							tab.completed
+								? "You have already completed this tab"
+								: ""
+						}
+						hasArrow
 					>
-						Mark as completed
-					</Button>
+						<Button
+							isDisabled={tab.completed}
+							onClick={async () => {
+								try {
+									await completeTab({
+										courseId: parseInt(courseId),
+										tabId: parseInt(tabId),
+									}).unwrap();
+									toast({
+										title: "Tab completed",
+										status: "success",
+										duration: 3000,
+										isClosable: true,
+									});
+								} catch (err) {
+									toast({
+										title: "Failed to complete tab",
+										status: "error",
+										duration: 5000,
+										isClosable: true,
+									});
+								}
+							}}
+						>
+							Mark as completed
+						</Button>
+					</Tooltip>
 				)}
 				<Flex gap={4} direction={{ base: "column", md: "row" }}>
 					<Flex gap={2}>

@@ -11,7 +11,7 @@ import PrivacyPolicy from "./pages/PrivacyPolicy";
 import UserProfilePage from "./pages/UserProfilePage";
 import CreateCoursePage from "./pages/CreateCoursePage";
 import TabPage from "./pages/TabPage";
-import CourseQuiz from "./pages/CourseQuiz";
+import QuizPage from "./pages/QuizPage";
 
 // Components
 import NavBar from "./components/NavBar";
@@ -52,7 +52,7 @@ function App() {
 					/>
 					<Route
 						path="/courses/:courseId/quiz"
-						element={<CourseQuiz />}
+						element={<QuizPage />}
 					/>
 
 					{/* Teacher routes */}

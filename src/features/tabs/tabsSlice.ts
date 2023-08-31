@@ -29,38 +29,8 @@ export const tabSlice = createSlice({
 	},
 });
 
-export const selectNextTabId = (state: RootState, tabId: number) => {
-	const index = state.tab.tabs.findIndex((tab) => tab.tab_id === tabId);
-	if (index === -1) {
-		return -1;
-	}
-	if (index === state.tab.tabs.length - 1) {
-		return -1;
-	}
-	return state.tab.tabs[index + 1].tab_id;
-};
-
-export const selectPreviousTabId = (state: RootState, tabId: number) => {
-	const index = state.tab.tabs.findIndex((tab) => tab.tab_id === tabId);
-	if (index === -1) {
-		return -1;
-	}
-	if (index === 0) {
-		return -1;
-	}
-	return state.tab.tabs[index - 1].tab_id;
-};
-
-export const selectTabsLength = (state: RootState) => {
-	return state.tab.tabs.length;
-};
-
 export const selectTabs = (state: RootState) => {
 	return state.tab.tabs;
-};
-
-export const areTabsCompleted = (state: RootState) => {
-	return state.tab.tabs.every((tab) => tab.completed);
 };
 
 export const selectStatusEnum = (state: RootState) => {

@@ -23,6 +23,7 @@ export interface Course {
 	studentsCount: number;
 	time_created: string;
 	rating: number;
+	ratingCount: number;
 	tabs?: TabPreview[];
 }
 

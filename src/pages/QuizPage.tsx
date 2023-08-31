@@ -20,6 +20,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 
 import { useParams, Navigate, useNavigate } from "react-router-dom";
 
+import { useGetCourseByIdQuery } from "../features/courses/courseApiSlice";
+
 import {
 	useGetQuestionsByCourseIdQuery,
 	useCompleteQuizMutation,
@@ -41,7 +43,7 @@ const schema = z.object({
 
 type FormValues = z.infer<typeof schema>;
 
-export default function CourseQuiz() {
+export default function QuizPage() {
 	const [questionIdx, setQuestionIdx] = useState(0);
 
 	const [completeQuiz, { isLoading: isLoadingCompleteQuiz }] =
@@ -56,7 +58,6 @@ export default function CourseQuiz() {
 
 	if (!courseId) return <div>Course not found</div>;
 	if (!role) return <div>Role not found</div>;
-	if (!courseStatus) return <div>Course state not found</div>;
 
 	if (role === "TEACHER") {
 		return (
@@ -89,18 +90,6 @@ export default function CourseQuiz() {
 		defaultValues,
 	});
 
-	useEffect(() => {
-		watch("questions");
-	}, [watch, questionIdx]);
-
-	const {
-		data: questions,
-		error,
-		isLoading,
-	} = useGetQuestionsByCourseIdQuery({
-		courseId: parseInt(courseId),
-	});
-
 	const onSubmit: SubmitHandler<FormValues> = async (data) => {
 		try {
 			await completeQuiz({
@@ -124,6 +113,24 @@ export default function CourseQuiz() {
 			});
 		}
 	};
+
+	useEffect(() => {
+		watch("questions");
+	}, [watch, questionIdx]);
+
+	useGetCourseByIdQuery({
+		courseId: parseInt(courseId),
+	});
+
+	const {
+		data: questions,
+		error,
+		isLoading,
+	} = useGetQuestionsByCourseIdQuery({
+		courseId: parseInt(courseId),
+	});
+
+	if (!courseStatus) return <div>Course state not found</div>;
 
 	if (error) return <div>Failed to load questions</div>;
 	if (isLoading || isLoadingCompleteQuiz) return <div>Loading...</div>;

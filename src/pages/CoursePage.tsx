@@ -251,7 +251,7 @@ export default function CoursePage() {
 						<StarIcon color="yellow.500" />
 					</Flex>
 
-					<Text>(1,234 ratings)</Text>
+					<Text>({course.course.ratingCount} ratings)</Text>
 				</Box>
 				<Divider orientation="vertical" />
 				<Box

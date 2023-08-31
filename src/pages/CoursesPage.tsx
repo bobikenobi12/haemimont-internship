@@ -274,10 +274,11 @@ export default function CoursesPage() {
 							teacher,
 							picturePath,
 							studentsCount,
+							rating,
+							ratingCount,
 							time_created,
 						}: CourseProps) => (
 							<Course
-								rating={0}
 								key={courseId}
 								courseId={courseId}
 								courseName={courseName}
@@ -287,6 +288,8 @@ export default function CoursesPage() {
 								teacher={teacher}
 								picturePath={picturePath}
 								studentsCount={studentsCount}
+								rating={rating}
+								ratingCount={ratingCount}
 								time_created={time_created}
 							/>
 						)
