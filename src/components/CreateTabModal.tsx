@@ -23,6 +23,7 @@ import {
 	useToast,
 } from "@chakra-ui/react";
 import { AddIcon, DeleteIcon } from "@chakra-ui/icons";
+import { motion } from "framer-motion";
 
 import { z } from "zod";
 import { useForm, SubmitHandler } from "react-hook-form";
@@ -121,7 +122,7 @@ export default function CreateTabModal({ courseId }: Props) {
 				duration: 5000,
 				isClosable: true,
 			});
-			// reset();
+			reset();
 			onClose();
 		} catch (err: any) {
 			console.log(err.message);
@@ -136,14 +137,23 @@ export default function CreateTabModal({ courseId }: Props) {
 	};
 	return (
 		<Box>
-			<IconButton
-				aria-label="Add tab"
-				colorScheme="purple"
-				variant="outline"
-				borderRadius={"50%"}
-				icon={<AddIcon />}
-				onClick={onOpen}
-			/>
+			<Tooltip
+				label={"Add a new tab"}
+				aria-label={"Add a new tab"}
+				hasArrow
+			>
+				<IconButton
+					aria-label="Add tab"
+					colorScheme="purple"
+					variant="outline"
+					borderRadius={"50%"}
+					icon={<AddIcon />}
+					onClick={onOpen}
+					as={motion.button}
+					whileHover={{ scale: 1.1 }}
+					whileTap={{ scale: 0.9 }}
+				/>
+			</Tooltip>
 			<Modal isOpen={isOpen} onClose={onClose}>
 				<form onSubmit={handleSubmit(onSubmit)}>
 					<ModalOverlay />

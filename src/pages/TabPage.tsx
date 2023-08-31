@@ -3,19 +3,22 @@ import { Box, Button, Flex, useToast } from "@chakra-ui/react";
 import { useParams, useNavigate } from "react-router-dom";
 
 import { useAppSelector } from "../app/hooks";
-import {
-	selectNextTabId,
-	selectPreviousTabId,
-} from "../features/tabs/tabsSlice";
+import { selectRole } from "../features/auth/authSlice";
+
+import { selectTabs } from "../features/tabs/tabsSlice";
 
 import {
 	useGetTabByIdQuery,
 	useCompleteTabMutation,
 } from "../features/tabs/tabsApiSlice";
+
+import { useGetCourseByIdQuery } from "../features/courses/courseApiSlice";
+
 import { AspectRatio, Badge, Divider, HStack, Heading } from "@chakra-ui/react";
-import { RootState } from "../app/store";
 
 export default function TabPage() {
+	const role = useAppSelector(selectRole);
+	const tabs = useAppSelector(selectTabs);
 	const toast = useToast();
 	const navigate = useNavigate();
 
@@ -28,12 +31,9 @@ export default function TabPage() {
 
 	if (!courseId || !tabId) return <div>Tab not found</div>;
 
-	const nextTabId = useAppSelector((state: RootState) =>
-		selectNextTabId(state, parseInt(tabId))
-	);
-	const previousTabId = useAppSelector((state: RootState) =>
-		selectPreviousTabId(state, parseInt(tabId))
-	);
+	useGetCourseByIdQuery({
+		courseId: parseInt(courseId),
+	});
 
 	const {
 		data: tab,
@@ -46,7 +46,9 @@ export default function TabPage() {
 
 	if (error) return <div>Failed to load tab</div>;
 	if (isLoading || isLoadingCompleteTab) return <div>Loading...</div>;
-	if (!tab) return <div>Tab not found</div>;
+	if (!tab || !tabs) return <div>Tab not found</div>;
+
+	console.log(tabs);
 
 	return (
 		<Box mt="10" mx="auto" maxW="container.lg">
@@ -76,12 +78,7 @@ export default function TabPage() {
 				p={4}
 				gap={4}
 			>
-				<Heading size="md">Actions:</Heading>
-				<Box
-					display="flex"
-					gap={4}
-					flexDirection={{ base: "column", md: "row" }}
-				>
+				{role === "STUDENT" && (
 					<Button
 						isDisabled={tab.completed}
 						onClick={async () => {
@@ -108,23 +105,36 @@ export default function TabPage() {
 					>
 						Mark as completed
 					</Button>
-					<Button
-						isDisabled={nextTabId === -1}
-						onClick={() => {
-							navigate(`/courses/${courseId}/${nextTabId}`);
-						}}
-					>
-						Next
-					</Button>
-					<Button
-						isDisabled={previousTabId === -1}
-						onClick={() => {
-							navigate(`/courses/${courseId}/${previousTabId}`);
-						}}
-					>
-						Previous
-					</Button>
-				</Box>
+				)}
+				<Flex gap={4} direction={{ base: "column", md: "row" }}>
+					<Flex gap={2}>
+						{tabs.map((tab, idx) => {
+							return (
+								<Box
+									aria-label={"Tab" + (idx + 1)}
+									key={idx}
+									onClick={() => {
+										navigate(
+											`/courses/${courseId}/${tab.tab_id}`
+										);
+									}}
+									as={Button}
+									colorScheme={
+										tab.completed ? "green" : "purple"
+									}
+									variant="outline"
+									border={
+										tab.tab_id === parseInt(tabId)
+											? "2px solid"
+											: "none"
+									}
+								>
+									{idx + 1}
+								</Box>
+							);
+						})}
+					</Flex>
+				</Flex>
 			</Flex>
 		</Box>
 	);

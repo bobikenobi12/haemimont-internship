@@ -315,14 +315,17 @@ export default function CoursePage() {
 											: 0}{" "}
 										Tabs
 									</Heading>
-									<Text>
-										{
-											course.course.tabs.filter(
-												(tab) => tab.completed
-											).length
-										}{" "}
-										/ {course.course.tabs.length} completed
-									</Text>
+									{role === "STUDENT" && (
+										<Text>
+											{
+												course.course.tabs.filter(
+													(tab) => tab.completed
+												).length
+											}{" "}
+											/ {course.course.tabs.length}{" "}
+											completed
+										</Text>
+									)}
 								</Flex>
 							)}
 						{role === "TEACHER" && (
@@ -337,7 +340,7 @@ export default function CoursePage() {
 					{course.course.tabs !== null &&
 						course.course.tabs !== undefined &&
 						course.course.tabs.length > 0 &&
-						course.course.tabs.map((tab) => (
+						course.course.tabs.map((tab, idx) => (
 							<Card
 								key={tab.tab_id}
 								w="100%"
@@ -367,21 +370,23 @@ export default function CoursePage() {
 											>
 												{tab.tabName}
 											</Heading>
-											<Text>Module {tab.tab_id}</Text>
+											<Text>Tab {idx + 1}</Text>
 										</Box>
-										<Badge
-											ml="1"
-											fontSize="0.8em"
-											colorScheme={
-												tab.completed
-													? "green"
-													: "yellow"
-											}
-										>
-											{tab.completed
-												? "Completed"
-												: "Not completed"}
-										</Badge>
+										{role === "STUDENT" && (
+											<Badge
+												ml="1"
+												fontSize="0.8em"
+												colorScheme={
+													tab.completed
+														? "green"
+														: "yellow"
+												}
+											>
+												{tab.completed
+													? "Completed"
+													: "Not completed"}
+											</Badge>
+										)}
 									</Flex>
 								</CardBody>
 							</Card>

@@ -51,6 +51,14 @@ export const selectPreviousTabId = (state: RootState, tabId: number) => {
 	return state.tab.tabs[index - 1].tab_id;
 };
 
+export const selectTabsLength = (state: RootState) => {
+	return state.tab.tabs.length;
+};
+
+export const selectTabs = (state: RootState) => {
+	return state.tab.tabs;
+};
+
 export const areTabsCompleted = (state: RootState) => {
 	return state.tab.tabs.every((tab) => tab.completed);
 };
