@@ -1,3 +1,5 @@
+import { useState } from "react";
+
 import {
 	Modal,
 	ModalOverlay,
@@ -40,6 +42,8 @@ interface Props {
 }
 
 export default function RateCoursezModal({ courseId }: Props) {
+	const [prev, setPrev] = useState<number | undefined>(undefined);
+
 	const [rateCourse, { isLoading }] = useRateCourseMutation();
 
 	const { isOpen, onOpen, onClose } = useDisclosure();
@@ -78,7 +82,6 @@ export default function RateCoursezModal({ courseId }: Props) {
 
 	useEffect(() => {
 		watch("rating");
-		console.log(getValues("rating"));
 	}, [watch]);
 
 	return (
@@ -107,6 +110,17 @@ export default function RateCoursezModal({ courseId }: Props) {
 											whileHover={{ scale: 1.2 }}
 											whileTap={{ scale: 0.8 }}
 											key={i}
+											onHoverStart={() => {
+												setPrev(getValues("rating"));
+												setValue("rating", i + 1);
+											}}
+											onHoverEnd={() => {
+												setValue("rating", prev ?? 0);
+											}}
+											onClick={() => {
+												setPrev(i + 1);
+												setValue("rating", i + 1);
+											}}
 										>
 											<Icon
 												as={StarIcon}
@@ -117,9 +131,6 @@ export default function RateCoursezModal({ courseId }: Props) {
 														: "gray.300"
 												}
 												cursor="pointer"
-												onClick={() => {
-													setValue("rating", i + 1);
-												}}
 												_hover={{
 													color: "purple.600",
 												}}
